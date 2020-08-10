@@ -1,7 +1,3 @@
-% zR zM open/close all folds
-% zj zk move next/prev fold
-% zo zc open/close fold
-
 \documentclass[12pt,french]{book}
 
 \usepackage[utf8]{inputenc}
@@ -20,8 +16,7 @@
 	Chapitre 2\\
 	Hadoop, Hive, Spark et Exemple d'Implémentation}
 \date{2020-08-01}
-\author{Gaetan Robert Lescouflair \\
-	Sergio Simonian}
+\author{Gaetan Robert Lescouflair}
 
 \begin{document}
 	\pagenumbering{gobble}
@@ -32,17 +27,20 @@
 	\setcounter{secnumdepth}{3}	
 	\section*{2 Généralité sur Hadoop}
 
-Apache Hadoop est un Framework multiplateforme écrit en java et open-source conçu pour deux (2) aspects principaux, le stockage de données distribuées et le traitement de données en parallèle sur de large volume en allant sur un petit cluster de quelque machine à de grand cluster de milliers de machines pouvant contenir des ordinateurs de capacité différente au niveau de hardware (Disque, CPU, mémoire RAM, et vitesse du BUS).
+Apache Hadoop est un Framework multiplateforme écrit en java et open-source conçu pour deux (2) aspects principaux, le stockage de données distribuées et le traitement de données en parallèle sur de large volume en allant sur un petit cluster de quelques machines à des grands clusters de milliers des machines pouvant contenir des ordinateurs de capacité différente au niveau de hardware (Disque, CPU, mémoire RAM, et vitesse du BUS).
  
-Hadoop joue un rôle important tant dans le stockage de données massive allant des données structurées aux données non-structurées par son système de stockage distribuée et tant dans le calcul distribué.  Dans un cluster Hadoop, il considère l’ensemble des machines comme une seule machine puissante. Au niveau du stockage, la somme de l’ensemble des capacités des disques sur chacune des machines équivaut aux volumes d’espace de stockage disponible. Au niveau du traitement des données, la puissance de calcul disponible équivaut à la somme de la puissance de tous les CPU combinés de toutes les machines faisant partie du cluster.
+Hadoop joue un rôle important tant dans le stockage de données massive allant des données structurées aux données non-structurées par son système de stockage distribuée et tant dans le calcul distribué.
+Dans un cluster Hadoop, il considère l’ensemble des machines comme une seule machine puissante.
+Au niveau du stockage, la somme de l’ensemble des capacités des disques sur chacune des machines équivaut aux volumes d’espace de stockage disponible.
+Au niveau du traitement des données, la puissance de calcul disponible équivaut à la somme de la puissance de tous les CPU combinés de toutes les machines faisant partie du cluster.
 
 Les grands fournisseurs de système de gestion de base de données du « Big Data » implémentent activement dans leurs solutions entreprises la plateforme Hadoop.
 Oracle « Big Data Appliance »
-	\footnote{Voir \url{https://docs.oracle.com/cd/E27101\_01/doc.10/e25961/concepts.htm}}
+	\footnote{Voir \url{https://docs.oracle.com/en/bigdata/big-data-appliance/5.1/bigug/concepts.html\#GUID-8D18CCDF-D5EB-421B-9E5D-13027856EDA0}}
 , Microsoft propose Polybase 
 	\footnote{Voir \url{https://docs.microsoft.com/en-us/sql/relational-databases/polybase/get-started-with-polybase}}
 faisant un couplage en Data warehouse et Hadoop au milieu, et les solution propriétairebasé sur Hadoop tel IBM BigInsights 
-	\footnote{Voir \url{https://www.ibm.com/developerworks/data/library/techarticle/dm-1110biginsightsintro/index.html}}
+	\footnote{Voir \url{https://www.ibm.com/support/knowledgecenter/en/SSPT3X\_4.0.0/com.ibm.swg.im.infosphere.biginsights.product.doc/doc/bi\_editions.html}}
 , Teradata “Unified Data Architecture” 
 	\footnote{Voir 
 		\begin{CJK*}{UTF8}{gbsn}
@@ -60,12 +58,13 @@ avec Hortonworks, etc.
 
 	\footnotetext{\url{https://infinitescript.com/wordpress/wp-content/uploads/2014/08/Differences-between-Hadoop-1-and-2.png}}
 
-Depuis son existant, Hadoop est à la version 2.8.
-Dans sa version 1 (Figure 2 - 1, Hadoop 1.0) les composants de base du fonctionnement d’Hadoop est le modèle MapReduce responsable du traitement distribué et la gestion des ressources du cluster, et HDFS (Hadoop Distributed File system) pour la réalisation du stockage distribué.
+A ce jour, Hadoop est à la version 3.3.0.
+Dans sa version 1 (Figure 2 - 1, Hadoop 1.0) les composants de base d’Hadoop est le modèle MapReduce qui est responsable du traitement distribué et la gestion des ressources du cluster, et HDFS (Hadoop Distributed File system) pour la réalisation du stockage distribué.
 Dans sa version 2 (Figure 2 - 1, Hadoop 2.0) le modèle MapReduce joue seulement le rôle de traitement distribué et Yarn est devenue le gestionnaire de ressources du cluster.
-Ce qui permet à Hadoop avoir autour de lui tout un écosystème, d’autre Framework capable de faire des traitements de données distribués tout en ajoutant de nouvelles structures et de nouvelles façons de faire fonctionner Hadoop temps au niveau applicatif qu’au niveau du temps d’exécution.
+Cela permet à Hadoop d'avoir autour de lui tout un écosystème incluant d’autres Frameworks capables de faire des traitements de données distribués tout en ajoutant des nouvelles structures et des nouvelles façons de faire fonctionner Hadoop au niveau applicatif qu’au niveau d’exécution.
+Enfin la version 3 introduit des ameliorations visant de reduire le cout de stockage néccesaire pour assurer la tolerance aux pannes et d'optimiser la gestion des ressources pour assurer une scalabilité encore supériore.
 
-Dans les sections suivantes de ce chapitre, on verra plus en détails le fonctionnement de MapReduce, d’HDFS, Yarn, l’écosystème autour d’Hadoop, une mise en œuvre d’Hadoop avec exemple d’exécution de MapReduce, et enfin Apache Hive et Apache Spark et comment les implémenter avec des exemples.
+Dans les sections suivantes de ce chapitre, on verra plus en détails le fonctionnement de MapReduce, d’HDFS, Yarn, l’écosystème autour d’Hadoop, une mise en œuvre d’Hadoop avec un exemple d’exécution de MapReduce, et enfin Apache Hive et Apache Spark et comment les implémenter avec des exemples.
 
 	\section{MapReduce}
 MapReduce est un paradigme visant à simplifier le traitement de données sur de grands clusters. Il permet le traitement de grand volume de données en parallèle en transformant l’ensemble des taches en un ensemble de petites taches pouvant être exécuter sur l’ensemble des machines du cluster. 
