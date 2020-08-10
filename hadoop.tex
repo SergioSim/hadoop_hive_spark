@@ -59,7 +59,7 @@ avec Hortonworks, etc.
 	\footnotetext{\url{https://infinitescript.com/wordpress/wp-content/uploads/2014/08/Differences-between-Hadoop-1-and-2.png}}
 
 A ce jour, Hadoop est à la version 3.3.0.
-Dans sa version 1 (Figure 2 - 1, Hadoop 1.0) les composants de base d’Hadoop est le modèle MapReduce qui est responsable du traitement distribué et la gestion des ressources du cluster, et HDFS (Hadoop Distributed File system) pour la réalisation du stockage distribué.
+Dans sa version 1 (Figure 2 - 1, Hadoop 1.0) les composants de base d’Hadoop sont: le modèle MapReduce qui est responsable du traitement distribué et la gestion des ressources du cluster, et HDFS (Hadoop Distributed File system) pour la réalisation du stockage distribué.
 Dans sa version 2 (Figure 2 - 1, Hadoop 2.0) le modèle MapReduce joue seulement le rôle de traitement distribué et Yarn est devenue le gestionnaire de ressources du cluster.
 Cela permet à Hadoop d'avoir autour de lui tout un écosystème incluant d’autres Frameworks capables de faire des traitements de données distribués tout en ajoutant des nouvelles structures et des nouvelles façons de faire fonctionner Hadoop au niveau applicatif qu’au niveau d’exécution.
 Enfin la version 3 introduit des ameliorations visant de reduire le cout de stockage néccesaire pour assurer la tolerance aux pannes et d'optimiser la gestion des ressources pour assurer une scalabilité encore supériore.
@@ -67,18 +67,19 @@ Enfin la version 3 introduit des ameliorations visant de reduire le cout de stoc
 Dans les sections suivantes de ce chapitre, on verra plus en détails le fonctionnement de MapReduce, d’HDFS, Yarn, l’écosystème autour d’Hadoop, une mise en œuvre d’Hadoop avec un exemple d’exécution de MapReduce, et enfin Apache Hive et Apache Spark et comment les implémenter avec des exemples.
 
 	\section{MapReduce}
-MapReduce est un paradigme visant à simplifier le traitement de données sur de grands clusters. Il permet le traitement de grand volume de données en parallèle en transformant l’ensemble des taches en un ensemble de petites taches pouvant être exécuter sur l’ensemble des machines du cluster. 
+MapReduce est un paradigme visant à simplifier le traitement de données sur de grands clusters tout en assurant la fiabilite du traitement et la tolerance aux pannes.
+Son principe se base sur la technique "diviser pour régner" - il decoupe le traitement en sous-traitements et les execute en parallele sur le cluster.
 
 Dans un processus MapReduce 4 étapes peuvent être distinguées.
-Le programme exécuté reçoit à l’entrée (Input) un groupement de donnée provenant de HDFS, procède aux 4 étapes (Découper, Mapper, Grouper, Réduire) et le résultat final en sortie sera mise dans un fichier dans HDFS.
+Le programme exécuté reçoit à l’entrée (Input) un groupement de donnée provenant de HDFS, procède aux 4 étapes (Découper, Mapper, Grouper, Réduire) et le résultat final en sortie sera mise dans HDFS.
 
 \paragraph{Les 4 étapes réalisées lors d’un MapReduce :}
 
 \begin{itemize}  
 \item 
-Découper (Split) : Rendre les données en entrée en plusieurs fragments pour former un sous ensemble de données selon une indice telle une espace, une virgule, point-virgule ou une nouvelle ligne.
+Découper (Split) : Rendre les données en entrée en plusieurs fragments pour former des sous-ensembles de données selon une indice telle qu'une espace, une virgule, point-virgule, une nouvelle ligne ou une autre regle logique.
 \item
-Map :  Convertir chacun des fragments en un autre sous ensemble de données où les éléments forment des couples (clef ; valeur).   
+Map : Convertir chacun des fragments en un autre sous ensemble de données où les éléments forment des couples (clef ; valeur).   
 \item
 Grouper (Shuffle) : Unir l’ensemble des couples (clef ; valeur) issue de la totalité des taches Map par clef.  
 \item
