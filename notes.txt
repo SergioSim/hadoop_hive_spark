@@ -1,0 +1,261 @@
+Mastering Hadoop 3 notes:
+
+--- Journey to Hadoop 3
+
+Doug Cutting - founder of Hadoop / Lucene 
+
+V3 features:
+- HDFS erasure encoding
+	for non-frequently accessed datasets replication is too costly, erasure encoding stores data durably while saving space significantly 
+
+- new YARN Timeline service (Architecture)
+	improve reliability, performance, scalability
+- YARN oportunistic containers
+- Distributed Scheduling
+- support for 3 name nodes
+- intra-data-node load balancers
+
++ preformance imporvements
++ bug fixes
+	(breaking/incompatible changes,  changes which are not backward-compatible)
++ port dependency moved out of the Linux ephemeral port range
++ reduce disk-level data skew - cli utility hdfs diskbalancer
+	
+
+Objectives:
+- scalability
+- Fault tolerant
+- Load balancing
+- prevent Data loss
+
+TODO:
+Read Goolge File System research paper
+MapReduce: Simplified Data Processing on Large Clusters (https://research.google.com/archive/mapreduce.html)
+
+MapReduce provides:
+- parallelism
+- fault tolerance
+- data locality features (program execution where the data is stored)
+
+NameNodes - maintain Metadata
+Yarn made hadoop more robust, faster and scalable
+
+ingress - enter
+egress - exit
+
+RPC - remote procedure call
+
+Client Protocol - RPC over TCP/IP - Hdfs Client <-> Namenode
+|-> the client / app tells what it wants to do = create / append / setReplication etc.
+Data Transfer Protocol - TCP/IP Streaming - Hdfs Client <-> Datanode
+|-> the client reads/writes data = readBlock / writeBlock / transferBlock / blockChecksum etc.
+Data Node Protocol - RPC over TCP/IP - Datanode --> Namenode
+|-> the datanode send operation / health and storage info to Namenode
+|-> ! one way protocol ! DN always starts and NN only respond to
+|-> registerDataNode / sendHeartBeat (tells "I'm alive! What should I do next?") / blockReport (NN responds which blocks are obsolete and shoud be deleted) (each 3 sec by default)
+
+NameNode manages HDFS file namespaces:
+- maintains metadata of files/dirs in HDFS (INodes tree-like datastructure in RAM)
+== name/username/group name/permissions/authorization ACLs/ modification time/access time/disk & space quotas
+- regulates any file operation - access control / which block and replicas should handle which datanode
+- informate the client about the datablocks and which datanode will serve read/write reqests
+- issues commands to datanodes like = delete corrupted data blocks
+- maintains a list of healthy datanodes
+
+Rack-Aware - Hadoop and it's components know the cluster topology and uses this info to ensure data availability in case of failures and optimise performance: Local > Rack Local> Off Rack
+
+HFDS - master / slave (worker) architecture
+
+Datanodes involved in:
+-> Heartbeat
+-> Read/Write - client sends request to NN - NN replies with list of DN for the read/write request
+-> Replication - DN recieves write requests from other DN
+-> Block reports - sent regulary to NN - keeps NN up to date of details of each block
+
+_____
+Hv1 - 1 NameNode = SPF
+Hv2 - HA NameNode = 2 NameNodes = 1 Active & 1 Standby (in sync with the active NN)
+Hv3 - HA NameNode = more than 2 NameNodes = 1 Active & N Standby (election on failure)
+_____
+Quorum Journal Manager
+
+- runns in each NN
+- communicates with Journal Nodes using RPC
+- writes namespace modifications to the local disk of Journal Nodes
+- any modification performed by the active NN is logged into edit files on the JournalNodes
+- the Standby NN reads the edit files and keeps it's fsimage in sync with the active NN
+
+Quorum Journal Manager assures that
+- only one NN can write to the edit logs
+- all JounralNodes are in sync (same file length)
+- JournalNodes that do not respond are marked "OutOfSync"
+
+DN send HeartBeats to all NN! (not just the active one)
+
+NN fsimage and edit logs:
+fsimage = HDFS directory information, file info, permissions, quotas, last access times, last modification times and block IDs for files (stored in RAM of the NN, and disk)
+edit logs are on disk too
+= complete state of the fs. Each fs modification has a increasing transaction ID
+
+to fetch the latest fs image from NN:
+hdfs dfsadmin -fetchImage /home/katzenmaul
+
+Offline Image Viewer tool:
+hdfs oiv --help
+
+edits log = list of changes applied on fs after the most recent fsimage
+1 entry for each operation 
+
+A periodic Checkpoint operation merges fsimage and the edit logs in fsimage.
+makes sure the edit logs do not grow too much
+
+Edit logs are binary - to convert to XML:
+sudo hdfs oev -i /path/to/edits_0000... -o editlog.xml
+
+On startup NN:
+- loads fsimage
+- aplies edit logs
+- writes new fsimage
+- clears edit logs
+
+then NN do not merge edit logs with fsimage
+Secondary NN does the merge of edit logs with fsimage and writes fsimage
+
+dfs.namenode.checkpoint.preriod - max time period before merge
+dfs.namenode.checkpoint.txns - max nb of transactions in edit logs before merge
+
+checksum is:
+calculated for each block stored in HDFS (write)
+verified by client when it reads the data from DN
+
+DN regularly runs a block scanner to verify the checksums
+Client sends info to NN if checksum of a block don't match and NN marks the DN block as corrupted until it's replaced or removed
+
+Snapshots
+allow snapshot for the tree, sub-tree, or directory:
+hdfs dfsadmin -allowSnapshot <path>
+hdfs dfs -createSnapshot <path> [<snapshotName>]
+
+Data rebalancing
+hdfs balancer --help
+hdfs balancer -threshold 15 = if hdfs is 60% full each DN should be [45-75]% full
+
+Best practices for balancer
+run when new node is added
+run at regular intervals
+
+the balancer job is queued (only one runns at the time)
+set balancer bandwith to 15 MBPS
+su hdfs -c 'hdfs dfsadmin -setBalancerBandwidth 15728640'
+
+files in HDFS are not editable - but we can append data
+
+Short circuit reads = when client is on the data node where the data is stored it can read the requested file directly.
+boolean configuration property dfs.client.read.shortcircuit
+
+diskbalancer tool:
+disk data distribution report - to identify DN that suffer from asymmetric data dist
+disk balancing on live DN - 3 phases: discover / plan / execute
+
+Lasy persist writes in HDFS
+- keep data in RAM - write on disk asyncronously - data loss danger - feature
+-- good for small frequently read/write data that we don't care much (temporary / recreatable) but want speed!
+-- in this case disable the replication too for more speed
+-- RAM disk needed in general for that
+
+Erasure encoding
+(stores data along with parity data able to recover in case of lost block with the help of some math equations / inverse matrix / xor / calculations and some magic)
+Hot data - access 20xday less than 7 days old
+Warm data - access few times a week
+Cold data - few times a month & older than a month -> EC! ERASURE ENCONDING
+
+ECManager - NN extention, manages EC blocks, (monitoring health/placement/group allocation/ coordination for recovery blocks)
+ECClient - HDFS extention, helps the client perform read write operations
+ECWorker - on DNs, recieves instructions from ECManager to recover failed erasure coded blocks
+
+EC Advantage
+- saving storage (50% storage overhead instead of 200% by replication)
+- configurable policy
+- easily recoverable
+
+EC Disadvantages
+- Data Locality (no replication, one block is only available on one machine)
+- Encoding / Decoding is CPU intensive (only in case of lost data?)
+
+HFDS common interfaces
+SKIPPED!!!
+
+HDFS commands
+hadoop fs -ls /path
+-copyFromLocal or -put /src /dest
+-copyToLocal or -get /hadoop /local
+-cp
+-du
+-getmerge = merge all files in directory in to one file
+-mkdir
+-rm
+-chown
+-cat = copy file data to standart output
+
+Distributed copy
+-distcp = copy data from one cluster to another cluster
+
+Admin commands (start with hdfs dfsadmin)
+-report = fs info, used space/ free space stats etc. (filter -live or -dead DN)
+-savemode enter/get/leave= maintenance state of NN - no changes to FileSystem allowed!
+
+On NN boot - NN starts with savemode - loads fsimage, applies editlogchanges to gsimage, recieves block report from DD and exit savemode
+
+YARN * hadoop v2
+new features: timeline server opportunist container
+history: in Hadoop v1 : JobTracker (manage ressources/schedule & track & restart on failure jobs) & TaskTracker (run Tasks & send progress report to JobTracker)
+
+Resource Manager (One) Master daemon
+= Master node responsible for managing ressources of submitted applications
+
+|->Scheduler
+	Allocate ressources requested by the pre-application application master
+	Schedules the Job (NO Monitoring)
+|->Application Manager
+	Manages and keeps track of each Application Master
+	Each client request for job submission is recieved by AppManager which starts the AppMaster on a cluster node
+	Destroys AppMaster
+	Can request back ressources from running applications when low on memory!
+
+Node Manager (Multiple)
+= runs the Per application - Application Master = launch & monitor containers of jobs
+= recieves instructions from Resource Manager to launch and execute containers 
+= sends Heartbeats to Resource Manager with machine details & memory
+
+Application Master (One per application)
+	on job submission = RM launches the AppMaster on one NodeManagerContainer
+	manage application execution in the cluster
+	request ressources from RM - RM sends info about contaiers
+	then coordinates with the NM to launch the containers to execute the application task
+	Sends Heartbeats to RM & updates ressources usage
+	Changes plan of execution if needed
+
+Yarn job scheduling - by default 3 available:
+
+FIFO scheduler - first come first serve - else have to wait till enought resources available
+
+Capacity scheduler - Guarantees minimum amount of resources per set user group (ex: group-a=60% group-b=40%) # ACL - Access Control List
+
+Faire scheduler - same ressources to all applications - be faire!
+
+RM high availability
+SPF! Active / Standby architecture 
+standby takes over when receiving tha signal from the ZooKeeper
+Components
+|->Resource Manager state store
+	file based and Zookeeper based state store implementation
+	cluster info restored from NodeManager heartbeats
+|->Resource Manager restart and failover
+	re-attempt for applications submitted to the failed resource manager
+	checkpoint precess avoids restarting already completed tasks
+|->Failover fencing
+	
+
+|->Leader elector
+
+
