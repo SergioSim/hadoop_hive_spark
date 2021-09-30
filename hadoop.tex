@@ -12,10 +12,8 @@
 \graphicspath{{images/}}
 \restylefloat{table}
 
-\title{Chapter 2\\
-Hadoop, Hive, Spark with examples
-}
-\date{2020-12-13}
+\title{Chapter 2\\Hadoop, Hive, Spark with examples}
+\date{2020-09-24}
 \author{Gaetan Robert Lescouflair\\Sergio Simonian}
 
 \begin{document}
@@ -33,27 +31,24 @@ Hadoop, Hive, Spark with examples
 
 
 As soon as we have more data than can be fit in one machine or we want to process more than a single machine can handle in a reasonable time, we tend to redesign our systems to work in a distributed manner.
-While a distributed system is able to scale horizontally (by adding more machines to the system) it comes with new challenges to tackle.
-How to optimally distribute the work load across (many different) machines ?
-How to assure that the system does not interrupt nor produce wrong results in case a machine fails (fault tolerance) or becomes unavailable (partition tolerance) ?
-Also, it is common that a distributed system serves multiple users and runs several applications at the same time.
-In that case, how to manage file access rights and resource usage quotas ?
-And how to make the distributed system appear as a single coherent system to the end-users ?
-In this chapter we will explore how Hadoop, Hive and Spark handle these challenges for us and provide us with a simple way to achieve distributed storage and parallel processing.
+While a distributed system can scale horizontally (by adding more machines), it comes with new challenges to tackle.
+How to optimally distribute the workload across (many different) machines?
+How to ensure that the system does not interrupt or produce wrong results if a machine fails (fault tolerance) or becomes unavailable (partition tolerance)?
+Also, a distributed system has to serve multiple users and run several applications concurrently.
+In that case, how to manage file access rights and resource usage?
+Moreover, how to make the distributed system appear as a single coherent system to the end-users?
+This chapter will explore how Hadoop, Hive, and Spark handle these challenges and provide us with a simple way to set up a distributed system featuring distributed storage and parallel processing.
  
 
 \section{Hadoop}
 
 
-Apache Hadoop is an open-source, cross-platform framework written in Java designed for distributed data storage and parallel data processing.
-Originally created by Doug Cutting and Mike Cafarella, it is based on two research papers from Google: "The Google File System" (2003) and "MapReduce: Simplified Data Processing on Large Clusters" (2004).
-It scales up from one machine to large clusters of thousands of machines which may have different hardware capacities (disk, CPU, RAM, and BUS speed).
-Hadoop plays an important role in both big data storage ranging from structured to unstructured data as well as in distributed computing.
+\emph{Apache Hadoop} is an open-source, cross-platform framework written in Java for distributed data storage and parallel data processing.
+Created by Doug Cutting and Mike Cafarella, it is based on two research papers from Google: "The Google File System" (2003) and "MapReduce: Simplified Data Processing on Large Clusters" (2004).
+It scales up from one machine to large clusters of thousands of machines with different hardware capacities (disk, CPU, RAM, and bandwidth).
+Hadoop plays an essential role in Big Data distributed computing and storage, ranging from structured to unstructured data.
 The machines in a Hadoop cluster work together to behave as if they were a single system.
-At the storage level, the sum of all disk capacities on each of the machines equals to the available storage space.
-At the data processing level, the available computing power is equal to the sum of the power of all the combined CPUs of all the machines in the cluster.
-
-Leading providers of Big Data Database Management Systems are actively implementing the Hadoop platform in their enterprise solutions.
+Leading providers of Big Data Database Management Systems have implemented the Hadoop platform in their enterprise solutions.
 For example, Oracle's "Big Data Appliance"
 \footnote{\url{https://docs.oracle.com/en/bigdata/big-data-appliance/5.1/bigug/concepts.html\#GUID-8D18CCDF-D5EB-421B-9E5D-13027856EDA0}}
 , Microsoft's "Polybase"
@@ -70,42 +65,42 @@ and IBM's "BigInsights"
 \end{figure}
 \footnotetext{\url{https://infinitescript.com/wordpress/wp-content/uploads/2014/08/Differences-between-Hadoop-1-and-2.png}}
 
-At the time of this writing, the latest version of Hadoop is 3.3.0.
-In its version 1 (Figure \ref{fig:differenceBetweenHadoop1and2}) the basic components of Hadoop are: the MapReduce model, which is responsible for the distributed processing and management of cluster resources, and HDFS (Hadoop Distributed File System) for the distributed storage.
-In its version 2 (Figure \ref{fig:differenceBetweenHadoop1and2}) the MapReduce model plays only the role of distributed processing and Yarn (Yet Another Resource Negotiator) has become the cluster resource manager.
-This allows Hadoop to have a whole ecosystem around it, including other Frameworks capable of doing distributed data processing, while adding new structures and new ways of making Hadoop work at the application level as well as at the execution level.
-Finally, in its version 3, improvements are introduced to reduce storage costs while ensuring fault tolerance and to optimize resource management for even greater scalability.
+At the time of this writing, the latest version of Hadoop is 3.3.1.
+In its first version (Figure \ref{fig:differenceBetweenHadoop1and2}), the essential components are the MapReduce model, which is responsible for the distributed processing and management of cluster resources, and HDFS (Hadoop Distributed File System) for the distributed storage.
+In the second version of Hadoop (Figure \ref{fig:differenceBetweenHadoop1and2}), the MapReduce model is used only for distributed processing, and YARN (Yet Another Resource Negotiator) has become the cluster resource manager.
+This change in architecture allows Hadoop to have a whole ecosystem around it, including other Frameworks capable of performing distributed data processing while adding new structures and new ways of making Hadoop function at the application and execution levels.
+Finally, in version 3, improvements are introduced to reduce storage costs while maintaining fault tolerance and optimizing resource management for even greater scalability.
 
-In the following sections of this chapter, we will look in more detail at how MapReduce, HDFS, Yarn and the ecosystem around Hadoop works, how to install Hadoop and run MapReduce jobs and finally present Apache Hive and Apache Spark and how to use them with examples.
+In the following sections of this chapter, we will look in more detail at how MapReduce, HDFS, YARN, and the ecosystem around Hadoop works, how to install Hadoop and run MapReduce jobs, and finally present Apache Hive and Apache Spark and how to use them with examples.
 
 
 \section{MapReduce}
 
 
-MapReduce is a paradigm designed to simplify data processing on large clusters while ensuring processing reliability and fault tolerance.
+\emph{MapReduce} is a paradigm designed to simplify parallel data processing on large clusters.
 Its principle is based on the "divide and conquer" technique - it divides the computation into sub-processes and runs them in parallel on the cluster.
 
-A common MapReduce program reads data from HDFS, splits it in parts, assigns for each part a key, groups these parts by their keys and computes a summary for each group.
+A standard MapReduce program reads data from HDFS, splits it into parts, assigns for each part a key, groups these parts by their keys, and computes a summary for each group.
 
 
-\paragraph{The 4 main steps of a MapReduce process:}\mbox{}\\
+\paragraph{The four main steps of a MapReduce process:}\mbox{}\\
 
 
-A MapReduce process consists of several steps. Here are the 4 main steps in their corresponding order:
+A MapReduce process consists of several steps. Here are the four main steps in their corresponding order:
  
 \begin{itemize}
 \item
-Split : Split input data into multiple fragments to form subsets of data according to an index such as a space, comma, semicolon, new line, or any other logical rule.
+\textbf{Split}: Split input data into multiple fragments to form subsets of data according to an index such as a space, comma, semicolon, new line, or any other logical rule.
 \item
-Map : Map each of the fragments into a new subset where the elements form key-value pairs.
+\textbf{Map}: Map each of the fragments into a new subset where the elements form key-value pairs.
 \item
-Shuffle : Group together all the key-value pairs by their respective keys.
+\textbf{Shuffle}: Group all the key-value pairs by their respective keys.
 \item
-Reduce : Perform a computation on each group of values and output a possible smaller set of values.
+\textbf{Reduce}: Perform a calculation on each group of values and output a possibly smaller set of values.
 \end{itemize}
 
 
-\paragraph{The general structure of a MapReduce process is in this form :}\mbox{}\\
+\paragraph{The general structure of a MapReduce process is in this form:}\mbox{}\\
 
 
 Map		(key 1, value 1)		->		list(key 2, value 2)
@@ -120,10 +115,10 @@ Reduce	(key 2, list(value 2))	->		list(key 3, value 3)
 \end{figure}
 
 
-\paragraph{Let's take a closer look of the MapReduce process steps with a word counter example (Figure \ref{fig:wordCountExample})}
+\paragraph{Let us take a closer look at the MapReduce process steps with a word count example (Figure \ref{fig:wordCountExample})}\mbox{}\\
 
 
-In the following table (Table ~\ref{tbl:wordCountExample}), we see for the different steps the shape of the input and output data.
+In the following table (Table ~\ref{tbl:wordCountExample}), we see the shape of the input and output data for the different steps.
 
 \begin{table}[H]
 \begin{tabular}{|p{1.4cm}|p{3.4cm}|p{1.5cm}|p{3.3cm}|p{2cm}|}
@@ -163,234 +158,311 @@ Subset of key-value pairs
 \end{table}
 
 
+\paragraph{Hadoop and MapReduce}\mbox{}\\
+
+In general, Hadoop executes each MapReduce process step in a distributed manner.
+To see how Hadoop distributes the split step, we will first look at how Hadoop stores its data in the following section.
+
+
 \section{HDFS}
 
 
 HDFS stands for Hadoop Distributed File System.
-It is a file system that, from a user perspective, can be compared to others such as Ext, Ext2, Ext3, Ext4, FAT32, NTFS, HFS+ and more.
-The difference between these file systems is that HDFS is distributed.
-In HDFS each file is divided into data blocks of 128 MB by default (this size is configurable).
-Therefore a 1 MB file stored in HDFS has a block size of 128 MB but uses 1 MB of physical disk.
-These blocks are then distributed over the entire cluster.
-Also each block is replicated by default 3 times (this can be configured too) across the cluster in order to assure fault tolerance.
-In that case, if a node in the cluster becomes unavailable, there will be, for each data block, 2 other nodes that have a replica of the lost block.
-% explain this later
-The reason is to minimize the cost of searching for blocks in the disk.
-As the speed of disks increases, so does the tendency to increase the block size in HDFS. 
-Hadoop is said to be a distributed file system, the data blocks are distributed across all the machines in the cluster and gives a view of a single disk machine.
-Because it allows in a single point to access the data distributed over the entire cluster.
-The data blocks are also replicated so that if one machine fails on the cluster, the system will continue to be available and running without disruption or data loss.
+As its name indicates, it is a distributed file system used by Hadoop.
+From a user perspective, it is similar to other filesystems such as Ext4, FAT32, NTFS, and HFS+.
+However, its internal functioning is very different.
+Due to its distributed nature, it can store large amounts of data.
+HDFS divides each file it stores into fixed-size blocks, distributes them over the entire cluster, and replicates each of them (by default three times) across the cluster to assure fault tolerance.
+In case a node in the cluster becomes unavailable, there will be, for each data block, two other nodes that have a replica of the lost block.
+All this is handled transparently for the end-user giving him the impression of a regular single-machine filesystem.
 
-Hadoop supports 3 installation modes: "Local (Standalone)", "Pseudo-Distributed", "Fully-Distributed".
-By default, Hadoop is configured in "Standalone" mode which runs in a non-distributed mode in a single Java process.
-In a "Pseudo-Distributed" configuration all the Hadoop daemons are running in separate Java processes on a single node (machine). A Fully-Distributed configuration runs on several machines forming a cluster where each machine runs their respective daemon separately.
+\paragraph{HDFS Architecture}\mbox{}\\
 
-\newpage
+HDFS is a master-worker architecture composed of two main daemons: NameNode and DataNode:
+\begin{itemize}
+\item
+The \textbf{NameNode} daemon is the master of the HDFS cluster.
+It stores metadata about all files and directories present on HDFS (their paths, data block IDs, access rights) and keeps track of all changes done to them.
+The NameNode persists this information on its local host OS file system in two types of files: \emph{fsimage} and \emph{edit-logs}.
+The \emph{fsimage} contains the state of the file system at a given time, and the \emph{edit-logs} record every change in the file system metadata since the creation of the last \emph{fsimage}.
+The NameNode also keeps track of the locations of blocks and replicas on the cluster.
+All interactions like downloading/uploading/listing/creating/deleting/moving/copying files on HDFS first go through the NameNode.
+In order to serve clients as quickly as possible, the NameNode daemon keeps all metadata in memory (RAM) and only persists metadata changes in the edit-logs.
+In case of a crash, when the NameNode restarts, it loads the last \emph{fsimage} in memory and applies the changes from the \emph{edit-logs} to restore its previous state. 
+However, to keep the file system consistent for all clients, there can only be one active NameNode on the cluster.
+Unfortunately, this constraint creates a single point of failure.
+If the NameNode becomes unavailable, the whole HDFS cluster cannot be used by the clients anymore.
+Fortunately, Hadoop provides a way to assure the NameNode High Availability by running one or multiple Standby NameNodes that keep their state in sync with the active one and can take over its role in case of a failure.
+Moreover, failover from the Active NameNode to a Standby NameNode can be relatively quick and transparent to the clients.
+
+\item
+The \textbf{DataNode} daemon is a worker of the HDFS cluster.
+It runs on every cluster node, except usually the Namenode, and is responsible for storing and managing data blocks.
+Each DataNode performs block creation, deletion, and replication upon instruction from the NameNode and serves read and write requests from the file system's clients.
+It also periodically sends Heartbeats and block reports to the NameNode to confirm that it is alive and healthy.
+The DataNodes communicate as well with each other to perform data replication.
+\end{itemize}
+
+\paragraph{Reading and Writing files on HDFS}\mbox{}\\
+ 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\linewidth]{hdfsArch}
 	\caption[HDFS Architecture]{HDFS Architecture \footnotemark}
 \end{figure}
-\footnotetext{\url{https://hadoop.apache.org/docs/r1.2.1/hdfs\_design.html}}
+\footnotetext{\url{https://hadoop.apache.org/docs/r3.3.1/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html}}
 
-\paragraph{HDFS Architecture}
+When a filesystem client wants to read a file in HDFS, it has to ask the NameNode where to retrieve the data blocks for the file.
+The NameNode will respond with a list of DataNodes for each block.
+Then the client has to contact the DataNodes directly to retrieve the corresponding data blocks.
+Finally, the filesystem client reconstructs the original file by merging the retrieved data blocks.
 
-\begin{itemize}
-\item
-The NameNode daemon, only one in active state for the whole cluster, stores for each file in HDFS it's metadata about the name, its directory, the positioning of blocks and replicas on the cluster.
+Writing files to HDFS is quite similar.
+The client splits the original file into blocks and asks the NameNode where to store them.
+The NameNode will respond with a list of DataNodes for each block.
+Then the client has to contact the DataNodes directly to send the corresponding file data blocks.
+Next, the DataNodes will replicate the received blocks and send an acknowledgment to the client.
+Finally, the client will notify the NameNode about the completion of the write operation.
 
-%HDFS is a master-slave architecture. The NameNode plays the role of a master in the HDFS architecture. It is the regulator that controls all operations on the data and stores all relevant metadata about data that's stored in HDFS. All data operations will first go through a NameNode and then to other relevant Hadoop components. The NameNode manages the File System namespace. It stores the File System tree and metadata of files and directories. All of this information is stored on the local disk in three types of files, namely File System namespace, image (fsimage) files, and edit logs files.
-%The fsimage file stores the state of the File System at a point in time. The edit logs files contains a list of all changes (creation, modification, truncation, or deletion) that are made to each HDFS file after the last fsimage file was created. A new fsimage file is created after collaborating the content of the most recent fsimage files with the latest edit logs. This process of merging fsimage files with edit logs is called checkpointing. It is system-triggered and is managed by system policies. NameNode also maintains a mapping of all data blocks to DataNode.
+Fortunately, for the end-user, reading and writing files on HDFS is abstracted by a command-line interface (\textbf{hadoop fs} \footnote{\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html}}) and a java library (\textbf{org.apache.hadoop.fs}\footnote{\url{https://hadoop.apache.org/docs/r3.3.1/api/org/apache/hadoop/fs/package-summary.html}}).
 
-\item
-	Le DataNode s’exécutant sur les autres machines du cluster participe au stockage des blocs d’information sur leurs disques.  Il est en perpétuel contact avec le NameNode pour tout échange (demande de stockage de blocs, les informations sur les blocs contenue, les statuts, etc.).   Les DataNodes communiquent entre eux pour effectuer la réplication des données et signalent le NameNode de son contenue actuel.
-\end{itemize}
-\paragraph{}
+\paragraph{Using HDFS comand-line interface}\mbox{}\\
 
-Un client qui veut lire ou écrire un fichier dans HDFS contacte le NameNode pour savoir ou récupérer ou stocker les blocs de ce dernier.
+Here we will demonstrate the usage of the Hadoop command-line interface with some examples.
 
-HDFS est utilisé non seulement pour le stockage des données usuelles, mais aussi le stockage de données temporaires issue des étapes intermédiaires des applications lors de leurs exécutions, et les résultats finals de l’exécution des applications.     
+To create some nesting directories, we can use the \textbf{-mkdir} argument followed by \textbf{-p} and the path of the directories.
 
-\section{Yarn}
+\begin{lstlisting}[language=bash, frame=single]
+hadoop fs -mkdir -p /user/hdoop/example
+\end{lstlisting}
 
-Yarn is Hadoop's resource manager that distributes tasks to all the machines in the Hadoop cluster and tracks the status of the running tasks.
+Next, we will create two files in our local filesystem and upload them to HDFS in our example directory using the \textbf{-put} argument.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=10cm]{demonsSchema}
-	\caption{Diagram of the positioning of the different daemons on the cluster}
-\end{figure}
+\begin{lstlisting}[language=bash, frame=single]
+echo "Hello Hadoop Welcome HDFS" > test_file_1.txt
+echo "Hello Yarn  Bye Yarn" > test_file_2.txt
+hadoop fs -put test_file_1.txt test_file_2.txt /user/hdoop/example
+\end{lstlisting}
 
-Dans l’architecture d’Hadoop Yarn dans un cluster (Figure 2 - 4), le NameNode (nœud Maitre) comporte le ResourceManager et les DataNode (nœud Esclave) comportent chacun un NodeManager.
+To list the content of our directory, we can use the \textbf{-ls} argument.
 
-Comme montre, les deémons de HDFS sont
+\begin{lstlisting}[language=bash, frame=single]
+hadoop fs -ls /user/hdoop/example
+\end{lstlisting}
 
-Comme on peut le voir dans le schéma suivant (Figure 2 - 5) le role de chaque elements au niveau du cluster lorsqu’un ou plusieurs clients envoient une application à être executée.
+To print the content of a file on the standard output, we can use the \textbf{-cat} argument.
+
+\begin{lstlisting}[language=bash, frame=single]
+hadoop fs -cat /user/hdoop/example/test_file_1.txt
+\end{lstlisting}
+
+Finally, to download a file back to our local filesystem, we can use the \textbf{-get} option.
+
+\begin{lstlisting}[language=bash, frame=single]
+hadoop fs -get /user/hdoop/example/test_file_2.txt ./downloaded_file.txt
+\end{lstlisting}
+
+Note that the \textbf{hadoop fs} command has many more arguments providing additional functionality.
+We have merely shown some of the most common and simple ones.
+For an exhaustive list of all available arguments, refer to the official Hadoop documentation. \footnote{\url{https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html}}) 
+
+\paragraph{MapReduce and HDFS}\mbox{}\\
+
+In a nutshell, files stored on HDFS are split into fixed-size blocks, replicated, and spread over the Hadoop cluster.
+This prior setup allows Hadoop to distribute the processing of MapReduce programs on cluster nodes that already possess the required data (data-locality).
+Let us now revisit the word count MapReduce example.
+In the first MapReduce step, we want to split our input file by line, and we
+have mentioned that Hadoop will perform this task in a distributed manner.
+Hadoop will start by computing the number of split operation tasks to spawn and selects several cluster nodes to perform these tasks based on their current resource availability, configured policies, and other factors with a preference for nodes that possess the required data.
+By default, the number of split operation tasks is equal to the number of data blocks of the input file.
+However, to accomplish this, Hadoop needs a way to coordinate its tasks which is the subject of the next section.
+
+\section{YARN}
+
+YARN is Hadoop's resource manager that distributes tasks to all the machines in the Hadoop cluster and tracks the status of the running tasks.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=10cm]{yarnArch}
-	\caption[Schéma de l'architecture de fonctionnement de Yarn]{Schéma de l'architecture de fonctionnement de Yarn \footnotemark}
+	\caption[YARN architecture]{YARN architecture \footnotemark}
+\label{fig:YARNarchitecture}
 \end{figure}
 
 \footnotetext{Source : \url{https://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/YARN.html}}
 
-Un \textbf{Client} peut envoyer n’importe quel type d’application reconnue par Yarn. 
+YARN is also a master-worker architecture composed of two main daemons: ResourceManager (master) and NodeManager (worker). (See Figure ~\ref{fig:YARNarchitecture}):
 
-Le \textbf{ResourceManager} fait le suivie des NodeManagers et des ressources disponibles.
-Il gère l’allocation des ressources disponibles aux applications et aux taches en évaluant le ou les nœuds les plus optimisés à recevoir l’ensemble des processus à exécuter.
-En prenant en compte la demande du client, le ResourceManager demande au NodeManager de recevoir une applicationMaster et crée un Container pour son exécution.
+\begin{itemize}
+\item
+The \textbf{ResourceManager} keeps track and manages available resources in the cluster. It also receives application submissions from clients.
 
-Le \textbf{NodeManager} fournit pour sa part des ressources pour effectuer les calculs sous forme de conteneurs (Containers) et fait la gestion des processus exécutés par les conteneurs.
+\item
+The \textbf{NodeManager} runs on each node of the cluster, except usually the ResourceManager node, and is responsible for providing execution containers. The containers consist of execution environments with limited resources (like RAM or CPU) and run tasks (for example, MAP, REDUCE, ApplicationMaster, ...).
+\end{itemize}
 
-L’\textbf{ApplicationMaster} fait la coordination de toutes ses taches en exécution c’est-à-dire les taches qui ont rapport à sa propre application.
-Elle fait la demande pour avoir des conteneurs adéquate pour l’exécution de ses taches.
+**********************************************************************
+When a YARN receives an application submission from a client, it starts its execution on a NodeManager cluster node.
+**********************************************************************
 
-Les \textbf{Containers} (Conteneurs) sont des ressources capables d’exécuter différents types de taches (Application Masters, Map, Reduce, …) et peut être dimensionner selon les besoins en termes de RAM et de CPU.
+\section{Hadoop Ecosystem}
 
-\section{Ecosystème Hadoop}
-
-Hadoop est un Framework qui comprend une panoplie d’outils et technologies autour de lui. Ainsi nous parlons de l’écosystème d’Hadoop. Avant de commencer à travailler avec Hadoop, il est tant essentiel de comprendre son environnement. Chaque outil peut jouer un rôle concret dans différentes parties d’un Project Big Data. La connaissant de son environnement permet de choisir les technologies adéquates pour une meilleur organisation, optimisation de son projet.
-
-L’écosystème d’Hadoop (décrit dans Figure 2- 6) est composé de ces composants principaux (HDSF, MapReduce, Yarn invoquer dans les sections précédentes) et un ensemble d’outils, pour la majorité des projets open-sources d’Apache Software Fondation et des solutions propriétaires.  Tous les outils dans son écosystème ont pour but principale l’ingestion, le stockage, l’analyse de données et la maintenance du système. 
+\textbf{Hadoop} is a framework that includes a range of tools and technologies around it which form the Hadoop ecosystem (see Figure ~\ref{fig:HadoopEco}).
+Before starting to work with Hadoop, it is vital to understand its environment.
+Each tool can play a substantial role in different parts of a Big Data Project.
+HDFS, YARN, and MapReduce are the foundation of the Hadoop ecosystem. Most tools of the Hadoop ecosystem are open-source projects from the Apache Software Foundation. However, there are proprietary solutions too.
+All the tools in the ecosystem have the ingestion, storage, analysis of data, and maintenance of the system as their primary purpose.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=10cm]{hadoopEco}
-	\caption[Schéma de représentation de l'écosystème d'Hadoop]{Schéma de représentation de l'écosystème d'Hadoop \footnotemark}
+	\caption[Hadoop ecosystem]{Hadoop ecosystem \footnotemark}
+\label{fig:HadoopEco}
 \end{figure}
 
 \footnotetext{Source : \url{https://cdn.edureka.co/blog/wp-content/uploads/2016/10/HADOOP-ECOSYSTEM-Edureka.png}}
 
-Le nombre d’outils autour d’Hadoop ne cesse d’augmenter. Dans cette section, on verra un aperçu des outils les plus utilisés actuellement sur le marché dans le domaine du Big Data.
+The number of tools around Hadoop is constantly increasing. In this section, we will take a look at the most commonly used tools currently on the market in the field of Big Data.
 
 
 \subsection{Hive}
 
-Apache Hive \footnote{Voir https://hive.apache.org/} est un Framework de Data Warehousing permettant à partir d’un interface SQL-like d’effectuer lecture, écriture et   la gestion de grand volume de données dans un environnement distribué.
+Apache Hive \footnote{See https://hive.apache.org/} is a Data Warehousing Framework that allows you to read, write and manage large volumes of data in a distributed environment from an SQL-like interface.
 
 \subsection{Spark}
 
-Apache Spark \footnote{Voir https://spark.apache.org/} est un Framework pour procéder à de l’analyse de données en utilisant des processus de traitement de données en mémoire dans un environnement distribué.
+Apache Spark \footnote{See https://spark.apache.org/} is a framework for performing data analysis using in-memory data processing in a distributed environment.
 
 \subsection{Sqoop}
 
-Apache Sqoop \footnote{Voir http://sqoop.apache.org/} est un outil de type ETL (Extract, Transform, Load) conçu pour effectuer des transferts de données en boucle entre Hadoop et les données structurée (base de données relationnelle, fichier CSV, …) sur de gros volume de manière efficacement.  
+Apache Sqoop \footnote{Voir http://sqoop.apache.org/} is an ETL (Extract, Transform, Load) tool designed to perform data transfers between Hadoop and structured data (relational database, CSV file, ...) on large volumes efficiently.  
 
 \subsection{Hbase}
 
-Apache HBase \footnote{Voir https://hbase.apache.org/} est une base de données Hadoop ayant la capacité de gérer l’accès en lecture et écriture de grand volume de données de façon aléatoire et en temps réel. HBase est une base capable de maintenir de très grandes tables pouvant contenir des millions de colonnes.    
+Apache HBase \footnote{Voir https://hbase.apache.org/} is a Hadoop database with the ability to manage read and write access to large volumes of data in a random and real-time manner. HBase is a database capable of maintaining large tables that can contain millions of columns.    
 
 \subsection{Pig}
 
-Apache Pig \footnote{Voir https://pig.apache.org/} est une plateforme pour effectuer l’analyse de données sur de grand volume de données. Son langage de très haut niveau, Pig Latin, un langage très textuel ayant des structures de commandes semblable à SQL. Lors de sa compilation, il produit de séquences de tâches Map et Reduce déjà capable d’être parallélisé sur Hadoop.  
+Apache Pig \footnote{Voir https://pig.apache.org/} is a platform for performing data analysis on large volumes of data. It offers a high-level language, named Pig Latin, with command structures similar to SQL. When compiled, it produces MAP and REDUCE job sequences already capable of being parallelized on Hadoop.
 
 \subsection{Zookeeper}
 
-Apache Zookeeper \footnote{https://zookeeper.apache.org/} est un gestionnaire de service centralisé dans un environnement distribué. Il permet dans un seul endroit de faire maintenance les informations de configuration et fournit la synchronisation d’information distribué et des services d’énumération et de regroupement.   
+Apache Zookeeper \footnote{See https://zookeeper.apache.org/} is a centralized service manager in a distributed environment. It allows to maintain configuration information and provides distributed information synchronization and enumeration and grouping services.
+
 % Maintains data across a distributed system in a consistent manner 
-% For example, it's able to keep track of information that must be in sync across your cluster
+% For example, it can keep track of information that must be in sync across the cluster
 %  - Which node is the master / - What task are assigned to which workers / - Which workers are currently available
 %  - What tasks are assigned to which workers
 %  - Which workers are currently available
 % Can be used as a tool that applications can use to recover from partial failures in a cluster
-% An integral part of HBase, High-Availability MapReduce, Drill, Storm, Solr and much more
+% An integral part of HBase, High-Availability MapReduce, Drill, Storm, Solr, and much more
 
-% (Master election) In High-Availability single master systems (HBase / YARN / HDFS) - can keep track who the master node is, detect when the master is down, trigger new master election for the standby master nodes and assure only one new master node is elected.
-% One node registers itself as the master and holds a "lock" on that data. Other nodes cannot become master until the lock is released. Only one node allowed to hold the lock at a time.
+% (Master election) In High-Availability single master systems (HBase / YARN / HDFS) - can keep track of who the master node is, detect when the master is down, trigger a new master election for the standby master nodes and assure only one new master node is elected.
+% One node registers itself as the master and holds a "lock" on that data. Other nodes cannot become master until the lock is released. Only one node is allowed to hold the lock at a time.
 
 % (Crash detection) Can detect and notify the application of Worker node crashes - then the application can redistribute the work load.
 % "Ephemeral" data on a node's availability goes away if the node disconnects or fails to refresh itself (heartbeat) after some timeout period.
 % (Group management) keep track of what workers are available in your pool
-% (Store Metadata) that has to be consistent across the entire cluster like - list of outstanding tasks, tasks assignments.
+% (Store Metadata), which has to be consistent across the entire cluster, like a list of outstanding tasks and assignments.
 % Detect network failures (partitioning).
 
-% But instead of providing a specific API tackling these problems - Zookeeper is much more general - it provides a very consistent little distributed file system that any application in the distributed system can read and write to. Using this approach it pushes the logic of how to deal with those failures to the individual applications.
-% Replace the concept of file with znode and you pretty much got it!
+% But instead of providing a specific API tackling these problems - Zookeeper is much more general - it provides a very consistent little distributed file system that any application in the distributed system can read and write. Using this approach pushes the logic of dealing with those failures to the individual applications.
+% Replace the concept of file with znode, and you pretty much got it!
 
 % Zookeepers API:
 % Create, delete, exists, setData, getData, getChildren
 
 % To avoid continuous polling, clients can register for notifications on a znode.
 % Persistent znodes - remain stored until explicitly deleted
-% Ephemeral znodes go away if the client that created it crashes or loses it's connection to zookeeper.
+% Ephemeral znodes go away if the client that created it crashes or loses its connection to Zookeeper.
 
 % Zookeeper architecture image from zookeeper.apache.org
-% ZK clients (maintains a list of ZK servers adresses to) connect to one of the ZK servers (in a distributed manner to distribute de read load) which form an ZK Ensemble. ZK Ensemble replicates the data among its nodes.
-% When a client writes to ZK ensemble - it waits for confirmation while the date is replicated in a configured number of ZK servers (zookeeper quorum) (to guarantee consistency). Split Brain problem - when a part of the cluster has different information that another part. (Availability trade-off of the CAP theorem) 
+% ZK clients (maintains a list of ZK servers addresses to) connect to one of the ZK servers (in a distributed manner to distribute de read load), which form a ZK Ensemble. ZK Ensemble replicates the data among its nodes.
+% When a client writes to the ZK ensemble - it waits for confirmation while the date is replicated in a configured number of ZK servers (zookeeper quorum) (to guarantee consistency). Split Brain problem - when a part of the cluster has different information than another part. (Availability trade-off of the CAP theorem) 
 
 \subsection{Ambari}
 
-Apache Ambri \footnote{Voir https://ambari.apache.org/} est un outil de gestion qui offre des services simplifiant l’approvisionnement de nouveau service et de sa configuration, la gestion et la surveillance dans des clusters d’Hadoop.
+Apache Ambri \footnote{See https://ambari.apache.org/} is a management tool that provides services to simplify new service provisioning and configuration, management, and monitoring in Hadoop clusters.
 
 \subsection{Oozie}
 
-Apache Oozie \footnote{Voir http://oozie.apache.org/} est système de planification et de déclenchement d’événement dans Hadoop. Il peut être considéré comme un service d’horloge ou d’alarme interne à Hadoop. Il a la capacité d’exécuter un ensemble d’évènements une après l’autre ou de déclencher des évènements par rapport à la disponibilité d’information. Les évènements lancés peuvent être des taches map-reduce, Pig, Hive, Sqoop ou programme Java, etc. 
+Apache Oozie \footnote{See http://oozie.apache.org/} is an event scheduling and triggering system in Hadoop.
+It can be considered as a clock or alarm service internal to Hadoop.
+It can execute a set of events one after the other or trigger events based on the availability of information.
+The events launched can be map-reduce, Pig, Hive, Sqoop, Java program tasks, and many others.
 
-\subsection{Apache Solr et Lucene}
+\subsection{Apache Solr and Lucene}
 
-Apache Solr et Apache Lucene \footnote{Voir http://lucene.apache.org/solr/} sont une combinaison de deux (2) services qui sont utilisés pour la recherche et l’indexation dans l’environnement Hadoop.  Il est adapté pour la réalisation de système d’information nécessitant la recherche sur des textes intégral. Lucene est un composant cœur et Solr est bati autour de lui ajoutant encore plus de fonctionnalité.  
+Apache Solr and Apache Lucene \footnote{See https://solr.apache.org/} are two services that are used for search and indexing in the Hadoop environment. 
+They are suitable for implementing information systems that require full-text search.
+Lucene is a core component, and Solr is built around it, adding even more functionality.  
 
 \subsection{Kafka}
 
-Apache Kalka est un système de messagerie distribué permettant la publication, l’abonnement et l’enregistrement des échanges de flux de données. Il permet la création d’un pipeline de diffusion de données entre des systèmes ou des applications. 
+Apache Kalka \footnote{See https://kafka.apache.org/} is a distributed messaging system for publishing, subscribing and recording data stream exchanges.
+It allows the creation of a data distribution pipeline between systems or applications. 
 
 \subsection{Storm}
 
-Apache Storm est un système de traitement d’informations diffusées en temps réel d’Hadoop pour la réalisation de cas d’usage d’analyse en temps réel, du Machine Learning, la surveillance d’opérations en continue.
+Apache Storm \footnote{See https://storm.apache.org/} is a data stream processing system for real-time analytics use cases, machine learning, continuous operations monitoring.
 
 \subsection{Flume}
 
-Apache Flume est un service distribué de collecte, d’agrégation, de transfert de grand volume de données semi-structurées ou non-structurées de flux en ligne dans HDFS. Ces données sont en provenance de serveur web tel que les fichiers journaux, le trafic réseau, les médias sociales, etc.
+Apache Flume \footnote{See https://flume.apache.org/} is a distributed service for collecting, aggregating, and transferring large volumes of semi-structured or unstructured data from online streams in HDFS.
 
 \subsection{Drill}
 
-Apache Drill est moteur de requête SQL sans schéma pour Hadoop, NoSQL, et Cloud Storage. Il supporte une variété de base de données NoSQL et est capable d’effectuer des requêtes de jointure entre multi-sources de données.  
+Apache Drill \footnote{See https://drill.apache.org/} is a schema-free SQL query engine for Hadoop, NoSQL, and Cloud Storage.
+It supports a variety of NoSQL databases and is capable of performing join queries between multiple data sources.   
 
 \subsection{Mahout}
 
-Apache Mahout \footnote{Voir http://mahout.apache.org/} fournit un environnement pour le développement d’application de Machine Learning à des performances scalable.
+Apache Mahout \footnote{See https://mahout.apache.org/} provides an environment for the development of Machine Learning applications at scale.
 
 \subsection{Impala}
 
-Apache Impala \footnote{Voir https://impala.apache.org/} (en projet d’incubation chez Apache) et Presto \footnote{Voir https://prestodb.io/} donnent une bonne appréciation très prometteuse d’eux même dès leur début.
-Tous les deux sont des moteurs de requête SQL pour les données du Big data. Ils sont capables très rapidement de traiter des données sur des Pétaoctets. Des chercheurs ont publié, chez Cloudera en 2015 « Impala : A Modern, Open-Source SQL Engine for Hadoop » \footnote{M. Kornacker et al., « Impala: A Modern, Open-Source SQL Engine for Hadoop. », in CIDR, 2015, vol. 1, p. 9.} et chez Facebook en 2013 « Presto : Interacting with petabytes of data at Facebook » \footnote{“Presto: Interacting with petabytes of data at Facebook.” [En Ligne]. Disponible : https://www.facebook.com/notes/facebookengineering/presto-interacting-with-petabytes-of-data-atfacebook/10151786197628920.}
+Apache Impala \footnote{See https://impala.apache.org/} and Presto \footnote{Voir https://prestodb.io/} are SQL query engines designed for Big Data.
+They are capable of processing Petabytes of data very quickly. 
+For more information on Impala, see « Impala : A Modern, Open-Source SQL Engine for Hadoop » \footnote{M. Kornacker et al., « Impala: A Modern, Open-Source SQL Engine for Hadoop. », in CIDR, 2015, vol. 1, p. 9.}
+And for Presto, see « Presto : Interacting with petabytes of data at Facebook » \footnote{"Presto: Interacting with petabytes of data at Facebook." [Online]. https://www.facebook.com/notes/facebookengineering/presto-interacting-with-petabytes-of-data-atfacebook/10151786197628920.}
 
 
-\section{Hadoop 3.3.0 cluster installation on Linux Ubuntu 20.04.1 LTS}
+\section{Hadoop 3.3.1 cluster installation on Linux Ubuntu 20.04.1 LTS}
 
 
-This section shows the configuration of an Apache Hadoop version 3.3.0 cluster with Yarn. As shown in the following diagram (Figure 2 - 7 ), the installation will be done on three (3) machines with one Master node and two (2) Slave nodes (Slave1 and Slave2).
-
+This section shows the installation and configuration of an Apache Hadoop version 3.3.1 cluster with YARN. As shown in the following diagram ~\ref{fig:clusterSchema}, the installation will be on three (3) machines with one Master node (hdmaster) and two Worker nodes (hdworker1 and hdworker2).
+However, because this example setup is a pretty small cluster and the Hadoop master services will not consume much processing power on the Master node, we will also use the Master node as a Worker node.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\linewidth]{clusterSchema}
 	\caption{Example Cluster Schema}
+\label{fig:clusterSchema}
 \end{figure}
 
-The machines used for this example installation are inter-connected through a network switch, run Linux Ubuntu 20.04.1 LTS operating system, have about 4G of RAM, 200G free space on their hard drives and Intel i3 processors.
+The machines used for this example installation are interconnected through a network switch, run Linux Ubuntu 20.04.1 LTS operating system, have about 4G of RAM, 200G free space on their hard drives, and Intel i3 processors.
 
 
 \subsection{Prerequisites}
 
 
-In this section, we will see the preliminary configurations for the operation of Apache Hadoop and some best practices.
+In this section, we will see the initial setup for the operation of Apache Hadoop and some best practices.
 Since Hadoop is a Java-based platform, in order for it to work, it needs the Java Virtual Machine (JVM) to run.
-Hadoop 3.3.0 can run on Java 8 or 11.
-We will install Java 8 because many Hadoop ecosystem components only support Java version up to 8. 
-Another important aspect is that Hadoop uses SSH (Secure Shell) for the connections between the nodes of the cluster.
-And to avoid security issues, a dedicated user is required to perform all activities related to Hadoop.
+Hadoop 3.3.1 can run on Java 8 or 11.
+We will install Java 8 because many Hadoop ecosystem components only support Java versions up to 8.
+Another important aspect is that Hadoop uses SSH (Secure Shell) to connect to the cluster nodes.
+Moreover, to provide better isolation and security between Hadoop services, it is recommended to create dedicated users.
 
 
-\subsubsection{Install Oracle Java version 8}
+\subsubsection{Install Java version 8}
 
+Firstly, we will install Java 8 on all cluster nodes.
 
-In the terminal terminal:
+In the terminal:
 
-{\parindent 0pt Update the package list:}
+{\parindent 0pt Update and upgrade packages:}
 \begin{lstlisting}[language=bash, frame=single]
 sudo apt update
+sudo apt upgrade
 \end{lstlisting}
 Install Java 8 OpenJDK Development Kit:
 \begin{lstlisting}[language=bash, frame=single]
@@ -411,64 +483,65 @@ OpenJDK 64-Bit Server VM (build 25.275-b01, mixed mode)
 \subsubsection{Hostname configuration}
 
 
-From the start, it is important to determine the host names and IP addresses associated with each machine.
-Our master node is "hdmaster" and our slave nodes are "hdslave1" and "hdslave2".
+It is important to determine the hostnames and IP addresses associated with each machine from the start.
+Our master node is named "hdmaster", and our worker nodes are "hdworker1" and "hdworker2".
 Make sure that each node has a static IP address so that it does not change over time.
-This can be done from the network configuration file (/etc/network/interfaces).
-Add in the \textbf{/etc/hosts} file the \textbf{IP addresses, hostnames and aliases} corresponding to each node.
+This can be done from the network configuration file, which can be found at /etc/network/interfaces.
+Add in the \textbf{/etc/hosts} file the \textbf{IP addresses and hostnames} corresponding to each node.
+We are using the \textbf{vim} text editor for this task.
+However, any other text editor could do it as well.
 \begin{lstlisting}[language=bash, frame=single]
-sudo nano /etc/hosts
+sudo vim /etc/hosts
 \end{lstlisting}
 \begin{lstlisting}[language=bash, frame=single]
-# IPs, Hostnames and aliases for Hadoop configuration
-192.168.2.120 hdmaster hdpdb-master
-192.168.2.121 hdslave1 hdpdb-slave1
-192.168.2.122 hdslave2 hdpdb-slave2
+# IPs and Hostnames for Hadoop configuration
+192.168.2.120 hdmaster
+192.168.2.121 hdworker1
+192.168.2.122 hdworker2
 \end{lstlisting}
 
 
 \subsubsection{Create a Hadoop user for HDFS and MapReduce access}
 
 
-We will create a non-root Hadoop user and group both named "hdoop" on each node of the cluster.
+We will create a non-root Hadoop user and a group named \textbf{hdoop} on each cluster node. However, using separate users for each Hadoop service is preferable because it provides better isolation and security.
 \begin{lstlisting}[language=bash, frame=single]
 sudo adduser hdoop
 \end{lstlisting}
 
 
-\subsubsection{SSH and pdsh installation}
+\subsubsection{SSH installation}
 
+In the terminal:
 
 \begin{lstlisting}[language=bash, frame=single]
 sudo apt install ssh
-sudo apt install pdsh
 \end{lstlisting}
 
 Setup Passwordless SSH access for Hadoop User.
 Generate the SSH key pair with passphrase in the master node:
 \begin{lstlisting}[language=bash, frame=single]
 su - hdoop
-ssh-keygen -t rsa -b 4096
-cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
-chmod 0600 %\$HOME/.ssh/authorized\_keys)
+ssh-keygen -t rsa -b 4096 -m pem
 \end{lstlisting}
-Then copy the SSH key from Master to the Slaves to initiate SSH access without a password.
+Then copy the SSH key from Master to the Workers and localhost to initiate SSH access without a password.
 \begin{lstlisting}[language=bash, frame=single]
-ssh-copy-id -i $HOME/.ssh/id_rsa.pub hdoop@hdslave1
-ssh-copy-id -i $HOME/.ssh/id_rsa.pub hdoop@hdslave2
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hdoop@hdworker1
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hdoop@hdworker2
+ssh-copy-id -i $HOME/.ssh/id_rsa.pub hdoop@localhost
 \end{lstlisting}
 Finally load the password for they SSH key in memory with ssh-agent
 \begin{lstlisting}[language=bash, frame=single]
-ssh-agent %\$SHELL)
+ssh-agent $SHELL
 ssh-add
 \end{lstlisting}
-To check that the Hadoop User has gained passwordless access for the localhost and the slave nodes we will try to initiate a connection with each one.
+To check that the Hadoop User has gained passwordless access for the localhost and the worker nodes, we will attempt to connect to each node.
 \begin{lstlisting}[language=bash, frame=single]
 ssh hdoop@localhost
 exit
-ssh hdoop@hdslave1
+ssh hdoop@hdworker1
 exit
-ssh hdoop@hdslave2
+ssh hdoop@hdworker2
 exit
 \end{lstlisting}
 
@@ -477,137 +550,163 @@ exit
 \subsection{Hadoop installation}
 
 
-Download Hadoop (here we will use version 3.3.0).
 The binary version of Apache Hadoop can be downloaded from the official website (https://hadoop.apache.org/).
 We choose the "/usr/local/" directory for the installation.
 \begin{lstlisting}[language=bash, frame=single]
 cd /usr/local/
 \end{lstlisting}
-Download the Hadoop archive file
+Download the Hadoop archive file:
 \begin{lstlisting}[language=bash, frame=single]
-sudo wget https://apache.mirrors.benatherton.com/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
+sudo wget sudo wget https://miroir.univ-lorraine.fr/apache/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
 \end{lstlisting}
-Unarchive the newly downloaded file (here hadoop-3.3.0.tar.gz)
+Unarchive the newly downloaded file (here hadoop-3.3.1.tar.gz)
 \begin{lstlisting}[language=bash, frame=single]
-sudo tar xzf hadoop-3.3.0.tar.gz
+sudo tar xzf hadoop-3.3.1.tar.gz
 \end{lstlisting}
-Give the hdoop user the ownership of the directory
+Give the hdoop user the ownership of the directory:
 \begin{lstlisting}[language=bash, frame=single]
-sudo chown hdoop:hdoop -R /usr/local/hadoop-3.3.0
+sudo chown hdoop:hdoop -R /usr/local/hadoop-3.3.1
+\end{lstlisting}
+We will also create an alias for our installation directory, which could be useful when upgrading the Hadoop version in the future:
+\begin{lstlisting}[language=bash, frame=single]
+sudo ln -s hadoop-3.3.1 hadoop
 \end{lstlisting}
 
 
 \paragraph{Setting up Hadoop environment variables}\mbox{}\\
 
 
-Switch to the hdoop user
+There are various environment variables to configure the Hadoop installation.
+Some notable environment variables are:
+\begin{itemize}
+\item
+The \textbf{JAVA\_HOME} variable informs Hadoop where to find the Java installation.
+
+\item
+The \textbf{HADOOP\_HOME} variable holds the absolute path to the Hadoop installation, and the \textbf{HADOOP\_CONF\_DIR} variable points to the directory containing the Hadoop configuration files.
+Hadoop ecosystem tools often require these variables to be set in order to find Hadoop libraries and configurations.
+
+\item
+The \textbf{HADOOP\_OPTS}  variable specifies JVM (Java Virtual Machine) options to use when starting Hadoop services.
+
+\end{itemize}
+
+We will define these environment variables for all cluster nodes in the \textbf{.profile} file at the home directory of the \textit{hdoop} user. In this way, the shell will define our environment variables on each subsequential login.
+First, switch to the hdoop user:
 \begin{lstlisting}[language=bash, frame=single]
-sudo su hdoop
+su - hdoop
 \end{lstlisting}
-Add Hadoop environment variables to the end of the hdoop user profile file
+Add Hadoop environment variables to the end of the hdoop user profile file.
 \begin{lstlisting}[language=bash, frame=single]
-nano /home/hdoop/.bashrc
+vim /home/hdoop/.profile
 \end{lstlisting}
 \begin{lstlisting}[language=bash, frame=single]
 ## BEGIN -- HADOOP ENVIRONMENT VARIABLES
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
-export HADOOP_HOME=/usr/local/hadoop-3.3.0
-export HADOOP_INSTALL=%\$HADOOP\_HOME)
-export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export HADOOP_HOME=/usr/local/hadoop
 export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
 export HADOOP_HDFS_HOME=$HADOOP_HOME
-export YARN_HOME=$HADOOP_HOME
-export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_YARN_HOME=$HADOOP_HOME
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
 export PATH=$PATH:$HADOOP_HOME/bin
 export PATH=$PATH:$HADOOP_HOME/sbin
+export PATH=$PATH:$JAVA_HOME/bin
 ## END -- HADOOP ENVIRONMENT VARIABLES
 \end{lstlisting}
-Make the modification of the profile file active immediately
+Make the change of the profile file active immediately:
 \begin{lstlisting}[language=bash, frame=single]
-source /home/hdoop/.bashrc
+source /home/hdoop/.profile
 \end{lstlisting}
 Update the Hadoop environment configuration file 
 \begin{lstlisting}[language=bash, frame=single]
-nano /usr/local/hadoop-3.3.0/etc/hadoop/hadoop-env.sh
+vim /usr/local/hadoop-3.3.1/etc/hadoop/hadoop-env.sh
 \end{lstlisting}
 Find the line defining containing "export JAVA\_HOME=" and update it to:
 \begin{lstlisting}[language=bash, frame=single]
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 \end{lstlisting}
-Check if the Hadoop command is now defined
+Check if the Hadoop command is now defined:
 \begin{lstlisting}[language=bash, frame=single]
 hadoop version
 \end{lstlisting}
-At this stage, Hadoop is in its default configuration, which also means that it is in "Stand Alone" mode.
+Hadoop is in its default configuration at this stage, which means it is in "Stand Alone" mode.
 
 
 \subsection{Configuring Hadoop in fully-distributed mode}
 
-
-\subsubsection{Creation of Hadoop's temporary data directories}
-
-
-In the master node :
-\begin{lstlisting}[language=bash, frame=single]
-sudo mkdir -p /usr/local/tmp_hadoop/hdfs/namenode
-sudo chown -R hdoop:hdoop /usr/local/tmp_hadoop/
-\end{lstlisting}
-In the slave nodes :
-\begin{lstlisting}[language=bash, frame=single]
-sudo mkdir -p /usr/local/tmp_hadoop/hdfs/datanode
-sudo chown -R hdoop:hdoop /usr/local/tmp_hadoop/
-\end{lstlisting}
-
+To change Hadoop's default configuration, we can use site-specific configuration files located by default at \textbf{\$HADOOP\_HOME/etc/hadoop}.
+Adding parameters to for example \textbf{mapred-site.xml}, \textbf{yarn-site.xml}, \textbf{capacity-scheduler.xml}, and other files in this directory means that Hadoop must consider these new properties listed instead of the default values.
 
 \subsubsection{Edit the "workers" file}
 
 
+The Hadoop master daemons need to know the hostnames or IP addresses of the worker nodes to communicate with and manage them. To provide this information to the Hadoop master daemons, we will edit the "workers" file.
 In the master node:
 \begin{lstlisting}[language=bash, frame=single]
-nano /usr/local/hadoop-3.3.0/etc/hadoop/workers
+vim /usr/local/hadoop/etc/hadoop/workers
 \end{lstlisting}
-Insert all slaves hostnames or IP addresses (one per line)
+Insert all workers hostnames or IP addresses (one per line)
 \begin{lstlisting}[language=bash, frame=single]
-hdslave1
-hdslave2
+hdworker1
+hdworker2
+localhost
 \end{lstlisting}
+Note that by adding \textbf{localhost} to this file, we also use our Master node as a Worker node. 
 
 
 \subsubsection{Edit the "core-site.xml" file}
 
 
-The "core-site.xml" file enables us to overwrite Hadoop's default configuration properties from "core-default.xml".
-Hadoop's official website provides more details about what is configurable in the core-site.xml along with the set default values.
-\footnote{See https://hadoop.apache.org/docs/r3.3.0/hadoop-project-dist/hadoop-common/core-default.xml}
-For our installation we will set the default file system name property to HDFS and point to our master node.
+The \textbf{core-site.xml} file enables us to overwrite Hadoop's default configuration properties from \textbf{core-default.xml}.
+Hadoop's official website provides more details about configurable values in the core-site.xml and the set of default values.
+\footnote{See https://hadoop.apache.org/docs/r3.3.1/hadoop-project-dist/hadoop-common/core-default.xml}
+We will set the default file system property to HDFS and point it to our master node for our installation.
 
-In the master node and the slave nodes :
+In the master node and the worker nodes :
 \begin{lstlisting}[language=bash, frame=single]
-nano /usr/local/hadoop-3.3.0/etc/hadoop/core-site.xml
+vim /usr/local/hadoop/etc/hadoop/core-site.xml
 \end{lstlisting}
 Insert this property between the opening (<configuration>) and closing (</configuration>) tags. 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=xml, frame=single]
 <property>
 	<name>fs.default.name</name>
 	<value>hdfs://hdmaster:9000</value>
 </property>
 \end{lstlisting}
 
+\subsubsection{Creation of Hadoop's data directories}
+
+Optionally, we can define the directories where HDFS DataNodes will store their local data blocks and where the NameNode will store its \textit{edit-logs} and \textit{fsimage}.
+In our example we will use the "/usr/local/tmp\_hadoop/namenode" and "/usr/local/tmp\_hadoop/datanode" directories.
+First, we will create the directories, and then in the following sections, we will present the corresponding Hadoop configuration. 
+In the master node (NameNode):
+\begin{lstlisting}[language=bash, frame=single]
+sudo mkdir -p /usr/local/tmp_hadoop/hdfs/namenode
+sudo mkdir -p /usr/local/tmp_hadoop/hdfs/datanode
+sudo chown -R hdoop:hdoop /usr/local/tmp_hadoop/
+\end{lstlisting}
+In the DataNodes nodes :
+\begin{lstlisting}[language=bash, frame=single]
+sudo mkdir -p /usr/local/tmp_hadoop/hdfs/datanode
+sudo chown -R hdoop:hdoop /usr/local/tmp_hadoop/
+\end{lstlisting}
+
 
 \subsubsection{Edit the "hdfs-site.xml" file}
 
 
-The "hdfs-site.xml" file enables us to overwrite the default configuration for the HDFS client from "hdfs-default.xml".
-In our example we will configure the block replication factor to 3 and indicate where the NameNode should store the name table (fsimage).
-Fore more details about what is configurable in the "hdfs-site.xml" see Hadoop's official website.
-\footnote{See https://hadoop.apache.org/docs/r3.3.0/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml}
+The \textbf{hdfs-site.xml} file enables us to overwrite the default configuration for the HDFS client from \textbf{hdfs-default.xml}.
+In our example, we will configure the block replication factor to 3 and indicate that the NameNode should store its local files (fsimage/edit-logs) in the data directory we created in the previous section ("Creation of Hadoop's data directories").
+For more details about what is configurable in the \textbf{hdfs-site.xml} see Hadoop's official website.
+\footnote{See https://hadoop.apache.org/docs/r3.3.1/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml}
 
-In the master node:
+In the master node and the worker nodes :
 \begin{lstlisting}[language=bash, frame=single]
-nano /usr/local/hadoop-3.3.0/etc/hadoop/hdfs-site.xml 
+vim /usr/local/hadoop/etc/hadoop/hdfs-site.xml 
 \end{lstlisting}
-Insert these properties between the opening (<configuration>) and closing (</configuration>) tags. 
+Insert these properties between the opening (<configuration>) and closing (</configuration>) tags.
 \begin{lstlisting}[language=bash, frame=single]
 <property>
 	<name>dfs.replication</name>
@@ -616,18 +715,6 @@ Insert these properties between the opening (<configuration>) and closing (</con
 <property>
 	<name>dfs.namenode.name.dir</name>
 	<value>/usr/local/tmp_hadoop/hdfs/namenode</value>
-</property>
-\end{lstlisting}
-
-In the slave nodes:
-\begin{lstlisting}[language=bash, frame=single]
-nano /usr/local/hadoop-3.3.0/etc/hadoop/hdfs-site.xml 
-\end{lstlisting}
-Insert these properties between the opening (<configuration>) and closing (</configuration>) tags.
-\begin{lstlisting}[language=bash, frame=single]
-<property>
-	<name>dfs.replication</name>
-	<value>3</value>
 </property>
 <property>
 	<name>dfs.datanode.data.dir</name>
@@ -639,15 +726,16 @@ Insert these properties between the opening (<configuration>) and closing (</con
 \subsubsection{Edit the "yarn-site.xml" file}
 
 
-The "yarn-site.xml" file enables us to overwrite the default configuration for YARN from "yarn-default.xml".
-In our example we will configure the hostnames and ports used by the Resource Manager, Scheduler and Resource Tracker.
-We will also configure the shuffle auxiliary service.
-Fore more details about what is configurable in the "yarn-site.xml" see Hadoop's official website.
-\footnote{https://hadoop.apache.org/docs/r3.3.0/hadoop-yarn/hadoop-yarn-common/yarn-default.xml}
+The \textbf{yarn-site.xml} file enables us to overwrite the default configuration for YARN from \textbf{yarn-default.xml}.
+In our example, we will configure the hostnames and ports used by the Resource Manager and Node Managers.
+We will also configure the auxiliary shuffle service and reduce the minimum container memory allocation value.
+Furthermore, we will enable log aggregation to store container logs on HDFS.
+For more details about what is configurable in the \textbf{yarn-site.xml} see Hadoop's official website.
+\footnote{https://hadoop.apache.org/docs/r3.3.1/hadoop-yarn/hadoop-yarn-common/yarn-default.xml}
 
 In the master node and the slave nodes :
 \begin{lstlisting}[language=bash, frame=single]
-nano /usr/local/hadoop-3.3.0/etc/hadoop/yarn-site.xml 
+vim /usr/local/hadoop/etc/hadoop/yarn-site.xml 
 \end{lstlisting}
 Insert these properties between the opening (<configuration>) and closing (</configuration>) tags. 
 \begin{lstlisting}[language=xml, frame=single]
@@ -671,19 +759,27 @@ Insert these properties between the opening (<configuration>) and closing (</con
       <name>yarn.nodemanager.aux-services</name>
       <value>mapreduce_shuffle</value>
 </property>
+<property>
+	<name>yarn.scheduler.minimum-allocation-mb</nam>
+	<value>256</value>
+</property>
+<property>
+        <name>yarn.log-aggregation-enable</name>
+        <value>true</value>
+</property>
 \end{lstlisting}
 
 
 \subsubsection{Edit the "mapred-site.xml" file}
 
 
-The "mapred-site.xml" file enables us to overwrite Hadoop's default configuration properties from "mapred-default.xml".
-Hadoop's official website provides more details about what is configurable in the mapred-site.xml along with the set default values.
-\footnote{http://hadoop.apache.org/docs/r3.3.0/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml}
-For our installation we will indicated that we want to use YARN as the runtime framework for executing our MapReduce jobs. We will also indicate where to search for related jar files and packages for our MapReduce applications.
+The \textbf{mapred-site.xml} file enables us to overwrite Hadoop's default configuration properties from \textbf{mapred-default.xml}.
+Hadoop's official website provides more details about what is configurable in the \textbf{mapred-site.xml} along with the set default values.
+\footnote{http://hadoop.apache.org/docs/r3.3.1/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml}
+We will indicate that we want to use YARN as the runtime framework for executing our MapReduce jobs for our installation. We will also indicate where to search for related jar files and packages for our MapReduce applications.
 In the master node and the slave nodes :
 \begin{lstlisting}[language=bash, frame=single]
-nano /usr/local/hadoop-3.3.0/etc/hadoop/mapred-site.xml 
+vim /usr/local/hadoop/etc/hadoop/mapred-site.xml 
 \end{lstlisting}
 Insert these properties between the opening (<configuration>) and closing (</configuration>) tags. 
 \begin{lstlisting}[language=bash, frame=single]
@@ -692,8 +788,16 @@ Insert these properties between the opening (<configuration>) and closing (</con
       <value>yarn</value>
 </property>
 <property>
-	<name>mapreduce.application.classpath</name>
-	<value>$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*:$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*</value>
+        <name>yarn.app.mapreduce.am.env</name
+        <value>HADOOP_MAPRED_HOME=$HADOOP_MAPRED_HOME</value>
+</property>
+<property>
+        <name>mapreduce.map.env</name>
+        <value>HADOOP_MAPRED_HOME=$HADOOP_MAPRED_HOME</value>
+</property>
+<property>
+        <name>mapreduce.reduce.env</name>
+        <value>HADOOP_MAPRED_HOME=$HADOOP_MAPRED_HOME</value>
 </property>
 \end{lstlisting}
 
@@ -701,7 +805,7 @@ Insert these properties between the opening (<configuration>) and closing (</con
 \subsubsection{Format the NameNode}
 
 
-In the master node, in order to start HDFS for the first time, it is required to format the NameNode.
+In the master node, to start HDFS for the first time, it is required to format the NameNode.
 \begin{lstlisting}[language=bash, frame=single]
 hdfs namenode -format
 \end{lstlisting}
@@ -712,7 +816,7 @@ hdfs namenode -format
 
 \subsubsection{Starting the HDFS daemons}
 
-
+To start HDFS, Hadoop provides a shell script named \textbf{start-dfs.sh}.
 In the master node:
 \begin{lstlisting}[language=bash, frame=single]
 start-dfs.sh
@@ -731,9 +835,9 @@ You should get something similar to this
 
 In the slave nodes :
 
-When the NameNode daemon launches, it connects to the slave nodes through SSH. No action is required on the slave nodes. 
+When the NameNode daemon launches, it connects to the slave nodes through SSH.
 
-To check that the slave nodes are properly started we can connect to the with SSH and run this command:
+To check that the slave nodes are properly started, we can connect to them with SSH and run this command:
 \begin{lstlisting}[language=bash, frame=single]
 jps
 \end{lstlisting}
@@ -745,6 +849,7 @@ jps
 
 \subsubsection{Starting the YARN daemon}
 
+Similar to HDFS, Hadoop provides a script to start YARN named \textbf{start-yarn.sh}
 In the master node:
 Run this command to start YARN
 \begin{lstlisting}[language=bash, frame=single]
@@ -763,12 +868,12 @@ The output should be similar to this
 7964 SecondaryNameNode
 \end{lstlisting}
 
-In the slave nodes:
+In the worker nodes:
 
-Here too, the YARN ResourceManager will connect to the slave nodes and start the NodeManager daemon.
-No further actions required.
+Here too, the YARN ResourceManager will connect to the worker nodes and start the NodeManager daemon.
+No further actions are required.
 
-To check the NodeManager has started, connect to the slave nodes and run this command
+To check the NodeManager has started, connect to the slave nodes and run this command:
 \begin{lstlisting}[language=bash, frame=single]
 jps
 \end{lstlisting}
@@ -779,27 +884,25 @@ The output should be similar to this
 7753 DataNode
 \end{lstlisting}
 
-To stop the Hadoop daemons, run the \textbf{stop-dfs.sh} and \textbf{stop-yarn.sh} scripts as the hadoop user (hdoop in our example).
+To stop the Hadoop daemons, run the \textbf{stop-yarn.sh} and \textbf{stop-dfs.sh} scripts as the hadoop user (hdoop in our example).
 
 
-\paragraph{Configuration de Yarn et MapReduce pour la gestion et optimisation des ressources}\mbox{}\\
+\paragraph{Configuring YARN and MapReduce for optimal resource management}mbox{}\\
 
 
-Yarn et MapReduce viennent avec une configuration par défaut. 
-En ajoutant des paramètres dans les fichiers « mapred-site.xml », « yarn-site.xml » et « capacity-scheduler.xml » signifient pour Hadoop qu’il doit considérer ces nouvelles propriétés inscrites au lieu des valeurs par défaut.
-Dans le but de la gestion et de l’optimisation des ressources partagé et d’utilisation de la mémoire, il faut savoir ou regarder pour trouver l’équilibre idéale pour le bon fonctionnement du système.
-Une configuration peut bien marché pour une application et non pour une autre par rapport au volume de mémoire demandé au ressources disponible.
-Anisi, fréquemment des processus d'exécution de plusieurs applications échoue car la taille de mémoire d'ApplicationMaster et d'autres conteneurs dépassent largement la capacité disponible.
-Ce qui peut impliquer une acceptation de l’application pour être exécuter et que le processus soit resté en fil d’attente ou un arrêt brutal du processus au cours de son exécution.
+It is crucial to know where to find the ideal balance for the system to manage and optimize shared resources and memory usage.
+One configuration may work well for one application and not for another.
+In many cases, processes running multiple applications fail because the memory size of ApplicationMaster and other containers exceeds the available capacity.
+Requiring resource-heavy containers may involve the application being accepted for execution and the process being left in a queue or abruptly stopped during execution.
 
-Les tableaux suivants décrivent la valeur par défaut et la valeur actuelle des propriétés d’ajustement dans leur fichier respectif. 
+The following tables describe the default and current values of some relevant configuration properties in their respective files. 
 
 \paragraph{mapred-site.xml}\mbox{}\\
 
 \begin{table}[H]
 \begin{tabular}{llll}
 \rowcolor[HTML]{4472C4} 
-{\color[HTML]{FFFFFF} Nom du propriété} & {\color[HTML]{FFFFFF} Valeur par défaut} & {\color[HTML]{FFFFFF} Valeur actuelle} & {\color[HTML]{FFFFFF} description} \\
+{\color[HTML]{FFFFFF} Property name} & {\color[HTML]{FFFFFF} Default value} & {\color[HTML]{FFFFFF} Current value} & {\color[HTML]{FFFFFF} description} \\
 \rowcolor[HTML]{D9E2F3} 
 mapreduce.map.memory.mb                 & 1204                                     & 256                                    &                                    \\
 mapreduce.reduce.memory.mb              & 3072                                     & 256                                    &                                    \\
@@ -818,7 +921,7 @@ yarn.app.mapreduce.am.command-opts      & -Xm1024m                              
 \begin{table}[H]
 \begin{tabular}{llll}
 \rowcolor[HTML]{4472C4} 
-{\color[HTML]{FFFFFF} Nom du propriété}  & {\color[HTML]{FFFFFF} Valeur par défaut} & {\color[HTML]{FFFFFF} Valeur actuelle} & {\color[HTML]{FFFFFF} description} \\
+{\color[HTML]{FFFFFF} Property name}  & {\color[HTML]{FFFFFF} Default value} & {\color[HTML]{FFFFFF} Current value} & {\color[HTML]{FFFFFF} description} \\
 \rowcolor[HTML]{D9E2F3} 
 yarn.nodemanager.resource.memory-mb      &                                          & 2048                                   &                                    \\
 yarn.scheduler.minimum-allocation-mb     & 1024                                     & 256                                    &                                    \\
@@ -835,67 +938,22 @@ yarn.nodemanager.pmem-check-enabled      & true                                 
 \caption{}
 \end{table}
 
-\paragraph{Création de répertoire et manipulation de fichier dans HDFS}\mbox{}\\
+\paragraph{Hadoop MapReduce example program}\mbox{}\\
 
-Apache Hadoop fournit un utilitaire de manipulation de fichiers et de répertoires au sein de HDFS. Son utilitaire est « hdfs dfs » ou « hadoop fs », qui sont deux commandes équivalentes.
+This section will showcase how to compile and run a MapReduce program for Hadoop.
+We will use a typical introductory WordCount example.
+In the example, we will use the \textbf{test\_file\_1.txt} and \textbf{test\_file\_2.txt} files stored in the \textbf{/user/hdoop/example} HDFS directory, which we created earlier.
 
-Création dans HDFS l’arborescence (/user/hdb/input\_ex) des répertoires suivants :
-
-\begin{lstlisting}[language=bash, frame=single]
-hdfs dfs -mkdir -p /user/hdb/input_ex
-\end{lstlisting}
-
-Création de deux fichiers test01 et test02 dans /home/hdb/ en ajoutant les textes respectifs.
+First, we will create a directory in our local filesystem to put our .java program.
 
 \begin{lstlisting}[language=bash, frame=single]
-nano test01
+mkdir   ~/word_count
+cd  ~/word_count/
 \end{lstlisting}
 
-\begin{lstlisting}[language=bash, frame=single]
-Hello Hadoop  Welcome HDFS
-\end{lstlisting}
+Next we will save the following Java code in a file named \textbf{WordCount.java} in our \textbf{word\_count} directory.
 
-\begin{lstlisting}[language=bash, frame=single]
-nano test02
-\end{lstlisting}
-
-\begin{lstlisting}[language=bash, frame=single]
-Hello Yarn  Bye Yarn
-\end{lstlisting}
-
-Ajout des fichiers testo1 et testo2 dans le répertoires /user/hdb/input\_ex dans HDFS précédemment créés
-
-\begin{lstlisting}[language=bash, frame=single]
-hdfs dfs -put /home/hdb/test0* /user/hdb/input_ex
-\end{lstlisting}
-
-Affichage la liste des fichiers dans le répertoire input\_ex
-
-\begin{lstlisting}[language=bash, frame=single]
-hdfs dfs -ls /user/hdb/input_ex
-\end{lstlisting}
-
-Lecture des informations se trouvant dans les fichiers test01 et test02 dans le répertoire input\_ex  
-
-\begin{lstlisting}[language=bash, frame=single]
-hdfs dfs -cat /user/hdb/input_ex/test0*
-\end{lstlisting}
-
-\paragraph{Exemple simple d’exécution d’un programme java MapReduce avec Hadoop}\mbox{}\\
-
-Dans cette section, on verra comment compiler et exécuter un code java MapReduce à partir d’Hadoop en utilisant exemple de base, le compteur de mots (WordCount).   Dans l’exemple, l’usage des fichiers test01 et test02 dans le répertoire /user/hdb/input\_ex dans HDFS crées précédemment.  
-
-Créer le répertoire suivant pour y déposer le fichier .java et qui par la suite, recevra les autres fichiers générés au cours de la manipulation. Puis se positionner dans le répertoire.
-
-\begin{lstlisting}[language=bash, frame=single]
-mkdir   ~/tuto_1
-cd  ~/tuto_1/
-\end{lstlisting}
-
-Sauvegarder le fichier java dans le répertoire nouvellement crée sous le nom de WordCount.java
-
-
-\paragraph{WordCount.java} \footnote{Source: https://hadoop.apache.org/docs/r2.8.0/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html}
+\paragraph{WordCount.java} \footnote{Source: https://hadoop.apache.org/docs/r3.3.1/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html}
 
 \begin{lstlisting}[language=java, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
 import java.io.IOException;
@@ -961,56 +1019,52 @@ public static void main(String[] args) throws Exception {
 }
 \end{lstlisting}
 
-Indiquer dans la variable d’environnement CLASSPATH l’ensembles des JAR nécessaire à la compilisation du programme Java
+To compile this program, Java needs to know where to find the present Hadoop libraries.
+One way to specify the locations of our libraries for the Java compiler is to add their paths to the \textbf{CLASSPATH} environment variable.
 
 \begin{lstlisting}[language=bash, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
-export CLASSPATH="/usr/local/hadoop/share/hadoop/common/hadoop-common-2.8.0.jar:/usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.8.0.jar:/usr/local/hadoop/share/hadoop/common/lib/commons-cli-1.2.jar:/usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.8.0.jar"
+export CLASSPATH="/usr/local/hadoop/share/hadoop/common/hadoop-common-3.3.1.jar:/usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-common-3.3.1.jar:/usr/local/hadoop/share/hadoop/common/lib/commons-cli-1.2.jar:/usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-core-3.3.1.jar"
 \end{lstlisting}
 
-Indiquer à Hadoop avec la variable d’environnement HADOOP\_CLASSPATH où se trouve l’outils de compilation Java à utiliser
+Them, we can compile our WordCount.java file with the following command:
 
 \begin{lstlisting}[language=bash, frame=single]
-$ export HADOOP_CLASSPATH=${JAVA_HOME}/lib/tools.jar
+javac WordCount.java
 \end{lstlisting}
 
-Compiler le code Java du fichier WordCount.Java avec cette line :
-
-\begin{lstlisting}[language=bash, frame=single]
-hadoop  com.sun.tools.javac.Main  WordCount.java 
-\end{lstlisting}
-
-Transformer le programme nouvellement compiler en fichier JAR sous le nom de « wc.jar »
+Next, package our newly compiled program in a JAR archive named \textbf{wc.jar}
 
 \begin{lstlisting}[language=bash, frame=single]
 jar -cf wc.jar WordCount*.class
 \end{lstlisting}
 
-Exécuter le programme MapReduce en lui indiquant en entrée (input) le répertoire (/user/hdb/input\_ex) dans HDFS où se trouve les fichiers test01 et test02 et en sortie (output) le répertoire (/user/hdb/output\_ex) pour le dépôt des résultats obtenus. 
+Finally, we will launch our MapReduce program by indicating as input the HDFS directory (/user/hdoop/example) where the \textbf{test\_file\_1.txt} and \textbf{test\_file\_2.txt} files are located and, as output, the directory (/user/hdb/output\_example)  where the results will be saved.
 
 \begin{lstlisting}[language=bash, frame=single]
-hadoop  jar  wc.jar  WordCount  /user/hdb/input_ex  /user/hdb/output_ex
+hadoop jar wc.jar WordCount /user/hdoop/example /user/hdoop/output_example
 \end{lstlisting}
 
-Regarder dans HDFS avec la commande suivante le liste des fichiers crées par le programme WordCount.
+To verify the results of our MapReduce program, we will list the contents of the \textbf{output\_example} directory.
 
 \begin{lstlisting}[language=bash, frame=single]
-hadoop fs -ls  /user/hdb/output_ex
+hadoop fs -ls  /user/hdoop/output_example
 \end{lstlisting}
-
 \begin{lstlisting}[language=bash, frame=single]
 Found 2 items
--rw-r--r--   3 hdb supergroup          0 2017-08-15 19:29 /user/hdb/output_ex/_SUCCESS
--rw-r--r--   3 hdb supergroup         51 2017-08-15 19:29 /user/hdb/output_ex/part-r-00000
+-rw-r--r--   3 hdoop supergroup          0 2021-09-29 07:59 /user/hdoop/output_example/_SUCCESS
+-rw-r--r--   3 hdoop supergroup         47 2021-09-29 07:59 /user/hdoop/output_example/part-r-00000
 \end{lstlisting}
 
-Le fichier « \_SUCCESS » généré signifie que le programme a bien été exécuté avec succès. Les résultats sont de le fichiers part-r-00000.  Selon le volume d’information à stocker, il peut les séparer en plusieurs parties des numérotations continues avec le préfixe « part-r- ».
+The generated "\_SUCCESS" file indicates that the program execution was successful.
+The results are in the file \textbf{part-r-00000}. 
+The number of result files names \textbf{part-r-XXXXX} depends on the number of reducer tasks involved in the MapReduce process, where \textbf{XXXXX} is a counter starting at \textbf{00000}.
 
-Afficher les résultats obtenus :
+To print the result file content to standart output we can use the following command:
 
 \begin{lstlisting}[language=bash, frame=single]
-hadoop fs -cat  /user/hdb/output_ex/part-r-*
+hadoop fs -cat  /user/hdoop/output_example/part-r-*
 \end{lstlisting}
-
+ 
 \begin{lstlisting}[language=bash, frame=single]
 Bye		1
 HDFS		1
@@ -1020,37 +1074,52 @@ Welcome	1
 Yarn		2 
 \end{lstlisting}
 
+Hadoop's default way to write final key-value pairs is to have one key-value per line where a tab character separates each key from the corresponding value.
+
 \section{Hive}
 
-Apache Hive est un Framework de Data Warehousing permettant à partir d’un interface SQL-like d’effectuer lecture, écriture et la gestion de grand volume de données dans un environnement distribué. 
-Hive utilise HDFS pour le stockage de ces données.
-Il a accès (lecture et écriture) à HDSF à travers le nœud maitre (NameNode) du cluster d’Hadoop.
-Hive procure une perception de ces données créées dans HDFS sous forme de base de données et de tables.
+\textbf{Apache Hive} is a data warehousing framework that provides an SQL-like interface to interact with large amounts of structured and semi-structured data stored in a distributed environment.
+Originally it was developed by Facebook to make processing data stored on HDFS more accessible for analysts familiar with SQL.
+The SQL language of Hive is called Hive Query Language (HiveQL or HQL).
+HiveQL is pretty similar to regular SQL.
+Though, it does not fully support all SQL-95 features \footnote{https://dwgeek.com/what-are-sql-features-missing-in-hive.html/} and has some differences in syntax.
+While Hive might seem to be a database, it is not a database per se. 
+Instead, It provides a perception of a database with tables and rows based on data stored on a filesystem.
+One of Hive's typical use cases is to map data stored on HDFS into databases and tables and then process it with HiveQL.
+However, Hive can also interact with many other storage systems and databases like MySQL, MongoDB, Oracle, and HBase.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\linewidth]{hiveSchema}
-	\caption[Schéma de l'architecture de fonctionnement interne de Hive]{Schéma de l'architecture de fonctionnement interne de Hive \footnotemark}
+	\caption[Hive architecture]{Hive architecture \footnotemark}
 \end{figure}
 
 \footnotetext{Source: T. White, Hadoop: the definitive guide; [storage and analysis at Internet scale], 4. ed., Updated Beijing: O'Reilly, 2015. p.480}
 
-Hive expose une liste de services et de fonctionnalité dans son architecture interne (Figure 2 - 8) :
+\paragraph{Hive architecture}\mbox{}\\
+
+Hive exposes a list of services and functionalities:
 
 \begin{itemize}
 \item
-Il propose 3 clients pour interagir avec Hive.  CLI (Hive Command line-interface) est le client Shell par défaut.  Beeline aussi une interface de line de commande ayant les mêmes fonctionnalités que le CLI avec la possibilité de connecté avec HiveServer 2 à travers un connecteur JDBC.  Le hwi (Hive Web Interface) est un simple client web au même titre que le CLI. 
+Il propose 2 clients pour interagir avec Hive. 
+CLI (Hive Command line-interface) est le client Shell par défaut. 
+Beeline aussi une interface de line de commande ayant les mêmes fonctionnalités que le CLI avec la possibilité de connecté avec HiveServer 2 à travers un connecteur JDBC.
 \item
 HiveServer2 est un service fournissant la possibilité de la connexion de multi utilisateurs (application) et d’authentification à Hive à travers Thrift, JDBC, et ODBC. 
 \item
-Hive Metastore est un service là pour le stockage des métadonnées concernant la structure des tables et des colonnes associées. Il rend à l’utilisateur une vision de base de données structurée. HCatalog est un API qui permet à d’autres applications d’avoir accès aux métadonnées de Hive Metastore. Hive Metastore peut être configuré de de 3 manière : 
+Hive Metastore est un service là pour le stockage des métadonnées concernant la structure des tables et des colonnes associées.
+Il rend à l’utilisateur une vision de base de données structurée.
+HCatalog est un API qui permet à d’autres applications d’avoir accès aux métadonnées de Hive Metastore.
+Hive Metastore peut être configuré de 3 manières : 
 	\begin{itemize}
 	\item
 	Embedded Metastore (Figure 2- 9) : ce mode utilise Derby comme base de données. La base Metastore et le service de Hive Metastore tournent dans le même processus d’exécution que Hive Server. Il ne peut qu’avoir qu’un utilisateur à la fois.
 	\item
 	Local Metastore (Figure 2 - 11) : Dans ce mode le service de Hive Metastore tourne dans le même processus d’exécution de HiveServer mais la base de Metastore tourne dans un processus différent et peut être dans un serveur distant.
 	\item
-	Remote Metastore (Figure 2 - 10) : dans ce mode, le service d’Hive Metastore s’exécute dans un processus séparé de Hive Server et de meme que la base Metastore. HiveServer2, Hcatalog et autre communique lui un API Thrift.
+	Remote Metastore (Figure 2 - 10) : dans ce mode, le service d’Hive Metastore s’exécute dans un processus séparé de Hive Server et de meme que la base Metastore.
+HiveServer2, Hcatalog et autre communique lui un API Thrift.
 	\end{itemize}
 \end{itemize}
 
@@ -1106,7 +1175,7 @@ Lancer cette commande pour procéder à l’installation de MySQL
 sudo apt-get install mysql-server
 \end{lstlisting}
 
-Lancer les services de mysql
+Lancer les services de MySQL
 
 \begin{lstlisting}[language=bash, frame=single]
 sudo service mysql start
@@ -1291,12 +1360,11 @@ sudo nano /usr/local/hive-2.3.0/bin/hive-config.sh
 \end{lstlisting}
 
 Chercher dans le fichier les lignes suivantes :
-% REMOVE \$
 \begin{lstlisting}[language=bash, frame=single]
 # Allow alternate conf dir location.
-HIVE_CONF_DIR="\${HIVE_CONF_DIR:-$HIVE_HOME/conf"
+HIVE_CONF_DIR="${HIVE_CONF_DIR:-$HIVE_HOME/conf"
 export HIVE_CONF_DIR=$HIVE_CONF_DIR
-export HIVE_AUX_JARS_PATH=\$HIVE_AUX_JARS_PATH
+export HIVE_AUX_JARS_PATH=$HIVE_AUX_JARS_PATH
 \end{lstlisting}
 
 Ajouter en dessous de ces lignes
@@ -1363,7 +1431,7 @@ Utilisez la commande ctrl + f pour accéder à l’option de rechercher (« fin
 
 <property>
     <name>hive.downloaded.resources.dir</name>
-    <value>/tmp/hive/\${hive.session.id}_resources</value>
+    <value>/tmp/hive/${hive.session.id}_resources</value>
     <description>Temporary local directory for added resources in the remote file system.</description>
 </property>
 
@@ -1373,8 +1441,6 @@ Utilisez la commande ctrl + f pour accéder à l’option de rechercher (« fin
     <description>The permission for the user specific scratch directories that get created.</description>
 </property>
 \end{lstlisting}
-
-% remove the \$ on top!
 
 \subsubsection{Démarrage des services de Hive}
 
@@ -1793,9 +1859,9 @@ sudo chown hdb:hadoop spark-2.2.0
 Arriver dans cette étape, on peut maintenant démarrer les démons de Spark sur les machines du cluster. De même que Hadoop, Spark peut mettre en route tous les démons Master et Workers à partir du nœud Master.
 
 Lancer cette commande sur le noeud maître en tant que l’utilisateur hdb
-%remove the \$
+
 \begin{lstlisting}[language=bash, frame=single]
-\$SPARK_HOME/sbin/start-all.sh 
+$SPARK_HOME/sbin/start-all.sh 
 \end{lstlisting}
 
 Verifier sur le nœud maitre avec cette commande, si tous les démons sont en exécution. Le démon du maitre de Spark est « Master »
@@ -1837,7 +1903,7 @@ Dans l’exemple, l’usage des fichiers test01 et test02 dans le répertoire /u
 Passer cette commande pour lancer le Spark-Shell en tant que client de yarn
 
 \begin{lstlisting}[language=bash, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
-\$SPARK_HOME/bin/spark-shell --master yarn --deploy-mode client
+$SPARK_HOME/bin/spark-shell --master yarn --deploy-mode client
 \end{lstlisting}
 
 Après avoir exécuter spark-shell en tant que client yarn, exécuter le code compteur de mot dans l’invite Scala de Spark.
@@ -1873,6 +1939,14 @@ hadoop fs -cat  /user/hdb/output_ex_spark/part-*
 
 \section{Références du Chapitre 2}
 
+How Hadoop splits input data:
+https://stackoverflow.com/questions/14291170/how-does-hadoop-process-records-split-across-block-boundaries
+https://stackoverflow.com/questions/9258134/about-hadoop-hdfs-file-splitting
+https://stackoverflow.com/questions/32876408/relation-between-number-of-input-splits-and-number-of-mappers-in-mapreduce-hadoo
+https://stackoverflow.com/questions/10719191/hadoops-input-splitting-how-does-it-work
+https://www.netjstech.com/2018/05/input-splits-in-hadoop.html
+https://www.netjstech.com/2018/04/data-locality-in-hadoop.html		
+
 
 [1]T. White, Hadoop: the definitive guide ; [storage and analysis at Internet scale], 4. ed., Updated. Beijing: O'Reilly, 2015.
 
@@ -1880,7 +1954,7 @@ hadoop fs -cat  /user/hdb/output_ex_spark/part-*
 
 [1]Manish A. Kukreja, « Apache Hive: Enterprise SQL on Big Data frameworks ». Unpublished, 2016.
 
-[1]A. Thusoo et al., « Hive - a petabyte scale data warehouse using Hadoop », 2010, p. 996‑1005.
+[1]A. Thusoo et al., « Hive - a petabyte-scale data warehouse using Hadoop », 2010, p. 996‑1005.
 
 [1]A. Thusoo et al., « Hive: a warehousing solution over a map-reduce framework », Proceedings of the VLDB Endowment, vol. 2, no 2, p. 1626‑1629, août 2009.
 
