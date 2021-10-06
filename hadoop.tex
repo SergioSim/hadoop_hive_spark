@@ -1,3 +1,4 @@
+
 \documentclass[12pt,english]{book}
 
 \usepackage[utf8]{inputenc}
@@ -44,7 +45,7 @@ This chapter will explore how Hadoop, Hive, and Spark handle these challenges an
 
 
 \emph{Apache Hadoop} is an open-source, cross-platform framework written in Java for distributed data storage and parallel data processing.
-Created by Doug Cutting and Mike Cafarella, it is based on two research papers from Google: "The Google File System" (2003) and "MapReduce: Simplified Data Processing on Large Clusters" (2004).
+Doug Cutting and Mike Cafarella created Hadoop, inspired by two research papers from Google: "The Google File System" (2003) and "MapReduce: Simplified Data Processing on Large Clusters" (2004).
 It scales up from one machine to large clusters of thousands of machines with different hardware capacities (disk, CPU, RAM, and bandwidth).
 Hadoop plays an essential role in Big Data distributed computing and storage, ranging from structured to unstructured data.
 The machines in a Hadoop cluster work together to behave as if they were a single system.
@@ -71,7 +72,7 @@ In the second version of Hadoop (Figure \ref{fig:differenceBetweenHadoop1and2}),
 This change in architecture allows Hadoop to have a whole ecosystem around it, including other Frameworks capable of performing distributed data processing while adding new structures and new ways of making Hadoop function at the application and execution levels.
 Finally, in version 3, improvements are introduced to reduce storage costs while maintaining fault tolerance and optimizing resource management for even greater scalability.
 
-In the following sections of this chapter, we will look in more detail at how MapReduce, HDFS, YARN, and the ecosystem around Hadoop works, how to install Hadoop and run MapReduce jobs, and finally present Apache Hive and Apache Spark and how to use them with examples.
+In the following sections of this chapter, we will look in more detail at how MapReduce, HDFS, YARN, and the ecosystem around Hadoop works, how to install Hadoop, and how to run MapReduce jobs, and finally present Apache Hive and Apache Spark and how to use them with examples.
 
 
 \section{MapReduce}
@@ -232,13 +233,13 @@ Here we will demonstrate the usage of the Hadoop command-line interface with som
 
 To create some nesting directories, we can use the \textbf{-mkdir} argument followed by \textbf{-p} and the path of the directories.
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hadoop fs -mkdir -p /user/hdoop/example
 \end{lstlisting}
 
 Next, we will create two files in our local filesystem and upload them to HDFS in our example directory using the \textbf{-put} argument.
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 echo "Hello Hadoop Welcome HDFS" > test_file_1.txt
 echo "Hello Yarn  Bye Yarn" > test_file_2.txt
 hadoop fs -put test_file_1.txt test_file_2.txt /user/hdoop/example
@@ -246,19 +247,19 @@ hadoop fs -put test_file_1.txt test_file_2.txt /user/hdoop/example
 
 To list the content of our directory, we can use the \textbf{-ls} argument.
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hadoop fs -ls /user/hdoop/example
 \end{lstlisting}
 
 To print the content of a file on the standard output, we can use the \textbf{-cat} argument.
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hadoop fs -cat /user/hdoop/example/test_file_1.txt
 \end{lstlisting}
 
 Finally, to download a file back to our local filesystem, we can use the \textbf{-get} option.
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hadoop fs -get /user/hdoop/example/test_file_2.txt ./downloaded_file.txt
 \end{lstlisting}
 
@@ -460,20 +461,20 @@ Firstly, we will install Java 8 on all cluster nodes.
 In the terminal:
 
 {\parindent 0pt Update and upgrade packages:}
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo apt update
 sudo apt upgrade
 \end{lstlisting}
 Install Java 8 OpenJDK Development Kit:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo apt install openjdk-8-jdk
 \end{lstlisting}
 Check the Java version:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 java -version
 \end{lstlisting}
 The output should look similar to this: 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 openjdk version "1.8.0_275"
 OpenJDK Runtime Environment (build 1.8.0_275-8u275-b01-0ubuntu1~20.04-b01)
 OpenJDK 64-Bit Server VM (build 25.275-b01, mixed mode)
@@ -490,10 +491,10 @@ This can be done from the network configuration file, which can be found at /etc
 Add in the \textbf{/etc/hosts} file the \textbf{IP addresses and hostnames} corresponding to each node.
 We are using the \textbf{vim} text editor for this task.
 However, any other text editor could do it as well.
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo vim /etc/hosts
 \end{lstlisting}
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 # IPs and Hostnames for Hadoop configuration
 192.168.2.120 hdmaster
 192.168.2.121 hdworker1
@@ -505,7 +506,7 @@ sudo vim /etc/hosts
 
 
 We will create a non-root Hadoop user and a group named \textbf{hdoop} on each cluster node. However, using separate users for each Hadoop service is preferable because it provides better isolation and security.
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo adduser hdoop
 \end{lstlisting}
 
@@ -514,29 +515,29 @@ sudo adduser hdoop
 
 In the terminal:
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo apt install ssh
 \end{lstlisting}
 
-Setup Passwordless SSH access for Hadoop User.
+Next, we will set up Passwordless SSH access for the Hadoop user.
 Generate the SSH key pair with passphrase in the master node:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 su - hdoop
 ssh-keygen -t rsa -b 4096 -m pem
 \end{lstlisting}
 Then copy the SSH key from Master to the Workers and localhost to initiate SSH access without a password.
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 ssh-copy-id -i $HOME/.ssh/id_rsa.pub hdoop@hdworker1
 ssh-copy-id -i $HOME/.ssh/id_rsa.pub hdoop@hdworker2
 ssh-copy-id -i $HOME/.ssh/id_rsa.pub hdoop@localhost
 \end{lstlisting}
 Finally load the password for they SSH key in memory with ssh-agent
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 ssh-agent $SHELL
 ssh-add
 \end{lstlisting}
 To check that the Hadoop User has gained passwordless access for the localhost and the worker nodes, we will attempt to connect to each node.
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 ssh hdoop@localhost
 exit
 ssh hdoop@hdworker1
@@ -552,23 +553,23 @@ exit
 
 The binary version of Apache Hadoop can be downloaded from the official website (https://hadoop.apache.org/).
 We choose the "/usr/local/" directory for the installation.
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 cd /usr/local/
 \end{lstlisting}
 Download the Hadoop archive file:
-\begin{lstlisting}[language=bash, frame=single]
-sudo wget sudo wget https://miroir.univ-lorraine.fr/apache/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+sudo wget https://miroir.univ-lorraine.fr/apache/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
 \end{lstlisting}
 Unarchive the newly downloaded file (here hadoop-3.3.1.tar.gz)
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo tar xzf hadoop-3.3.1.tar.gz
 \end{lstlisting}
 Give the hdoop user the ownership of the directory:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo chown hdoop:hdoop -R /usr/local/hadoop-3.3.1
 \end{lstlisting}
 We will also create an alias for our installation directory, which could be useful when upgrading the Hadoop version in the future:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo ln -s hadoop-3.3.1 hadoop
 \end{lstlisting}
 
@@ -593,14 +594,14 @@ The \textbf{HADOOP\_OPTS}  variable specifies JVM (Java Virtual Machine) options
 
 We will define these environment variables for all cluster nodes in the \textbf{.profile} file at the home directory of the \textit{hdoop} user. In this way, the shell will define our environment variables on each subsequential login.
 First, switch to the hdoop user:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 su - hdoop
 \end{lstlisting}
 Add Hadoop environment variables to the end of the hdoop user profile file.
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 vim /home/hdoop/.profile
 \end{lstlisting}
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 ## BEGIN -- HADOOP ENVIRONMENT VARIABLES
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 export HADOOP_HOME=/usr/local/hadoop
@@ -616,19 +617,19 @@ export PATH=$PATH:$JAVA_HOME/bin
 ## END -- HADOOP ENVIRONMENT VARIABLES
 \end{lstlisting}
 Make the change of the profile file active immediately:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 source /home/hdoop/.profile
 \end{lstlisting}
 Update the Hadoop environment configuration file 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 vim /usr/local/hadoop-3.3.1/etc/hadoop/hadoop-env.sh
 \end{lstlisting}
 Find the line defining containing "export JAVA\_HOME=" and update it to:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 \end{lstlisting}
 Check if the Hadoop command is now defined:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hadoop version
 \end{lstlisting}
 Hadoop is in its default configuration at this stage, which means it is in "Stand Alone" mode.
@@ -644,11 +645,11 @@ Adding parameters to for example \textbf{mapred-site.xml}, \textbf{yarn-site.xml
 
 The Hadoop master daemons need to know the hostnames or IP addresses of the worker nodes to communicate with and manage them. To provide this information to the Hadoop master daemons, we will edit the "workers" file.
 In the master node:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 vim /usr/local/hadoop/etc/hadoop/workers
 \end{lstlisting}
 Insert all workers hostnames or IP addresses (one per line)
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hdworker1
 hdworker2
 localhost
@@ -665,11 +666,11 @@ Hadoop's official website provides more details about configurable values in the
 We will set the default file system property to HDFS and point it to our master node for our installation.
 
 In the master node and the worker nodes :
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 vim /usr/local/hadoop/etc/hadoop/core-site.xml
 \end{lstlisting}
 Insert this property between the opening (<configuration>) and closing (</configuration>) tags. 
-\begin{lstlisting}[language=xml, frame=single]
+\begin{lstlisting}[language=xml, frame=single, basicstyle=\footnotesize]
 <property>
 	<name>fs.default.name</name>
 	<value>hdfs://hdmaster:9000</value>
@@ -682,13 +683,13 @@ Optionally, we can define the directories where HDFS DataNodes will store their 
 In our example we will use the "/usr/local/tmp\_hadoop/namenode" and "/usr/local/tmp\_hadoop/datanode" directories.
 First, we will create the directories, and then in the following sections, we will present the corresponding Hadoop configuration. 
 In the master node (NameNode):
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo mkdir -p /usr/local/tmp_hadoop/hdfs/namenode
 sudo mkdir -p /usr/local/tmp_hadoop/hdfs/datanode
 sudo chown -R hdoop:hdoop /usr/local/tmp_hadoop/
 \end{lstlisting}
 In the DataNodes nodes :
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo mkdir -p /usr/local/tmp_hadoop/hdfs/datanode
 sudo chown -R hdoop:hdoop /usr/local/tmp_hadoop/
 \end{lstlisting}
@@ -703,11 +704,11 @@ For more details about what is configurable in the \textbf{hdfs-site.xml} see Ha
 \footnote{See https://hadoop.apache.org/docs/r3.3.1/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml}
 
 In the master node and the worker nodes :
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 vim /usr/local/hadoop/etc/hadoop/hdfs-site.xml 
 \end{lstlisting}
 Insert these properties between the opening (<configuration>) and closing (</configuration>) tags.
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 <property>
 	<name>dfs.replication</name>
 	<value>3</value>
@@ -734,11 +735,11 @@ For more details about what is configurable in the \textbf{yarn-site.xml} see Ha
 \footnote{https://hadoop.apache.org/docs/r3.3.1/hadoop-yarn/hadoop-yarn-common/yarn-default.xml}
 
 In the master node and the slave nodes :
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 vim /usr/local/hadoop/etc/hadoop/yarn-site.xml 
 \end{lstlisting}
 Insert these properties between the opening (<configuration>) and closing (</configuration>) tags. 
-\begin{lstlisting}[language=xml, frame=single]
+\begin{lstlisting}[language=xml, frame=single, basicstyle=\footnotesize]
 <property>
       <name>yarn.resourcemanager.hostname</name>
       <value>hdmaster</value>
@@ -778,11 +779,11 @@ Hadoop's official website provides more details about what is configurable in th
 \footnote{http://hadoop.apache.org/docs/r3.3.1/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml}
 We will indicate that we want to use YARN as the runtime framework for executing our MapReduce jobs for our installation. We will also indicate where to search for related jar files and packages for our MapReduce applications.
 In the master node and the slave nodes :
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 vim /usr/local/hadoop/etc/hadoop/mapred-site.xml 
 \end{lstlisting}
 Insert these properties between the opening (<configuration>) and closing (</configuration>) tags. 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 <property>
       <name>mapreduce.framework.name</name>
       <value>yarn</value>
@@ -806,7 +807,7 @@ Insert these properties between the opening (<configuration>) and closing (</con
 
 
 In the master node, to start HDFS for the first time, it is required to format the NameNode.
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hdfs namenode -format
 \end{lstlisting}
 
@@ -818,16 +819,16 @@ hdfs namenode -format
 
 To start HDFS, Hadoop provides a shell script named \textbf{start-dfs.sh}.
 In the master node:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 start-dfs.sh
 \end{lstlisting}
 
 Run this command to check that the HDFS daemons started.
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 jps
 \end{lstlisting}
 You should get something similar to this
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 40161 NameNode
 40708 Jps
 40549 SecondaryNameNode
@@ -835,14 +836,14 @@ You should get something similar to this
 
 In the slave nodes :
 
-When the NameNode daemon launches, it connects to the slave nodes through SSH.
+When the NameNode daemon launches, it connects to the worker nodes through SSH.
 
-To check that the slave nodes are properly started, we can connect to them with SSH and run this command:
-\begin{lstlisting}[language=bash, frame=single]
+To check that the worker nodes are properly started, we can connect to them with SSH and run this command:
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 jps
 \end{lstlisting}
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 8561 Jps
 7753 DataNode
 \end{lstlisting}
@@ -852,16 +853,16 @@ jps
 Similar to HDFS, Hadoop provides a script to start YARN named \textbf{start-yarn.sh}
 In the master node:
 Run this command to start YARN
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 start-yarn.sh
 \end{lstlisting}
 
 Check that the YARN ResourceManager has started
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 jps
 \end{lstlisting}
 The output should be similar to this
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 8128 ResourceManager
 8561 Jps
 7604 NameNode
@@ -874,11 +875,11 @@ Here too, the YARN ResourceManager will connect to the worker nodes and start th
 No further actions are required.
 
 To check the NodeManager has started, connect to the slave nodes and run this command:
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 jps
 \end{lstlisting}
 The output should be similar to this
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 8561 Jps
 8249 NodeManager
 7753 DataNode
@@ -946,7 +947,7 @@ In the example, we will use the \textbf{test\_file\_1.txt} and \textbf{test\_fil
 
 First, we will create a directory in our local filesystem to put our .java program.
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 mkdir   ~/word_count
 cd  ~/word_count/
 \end{lstlisting}
@@ -955,7 +956,7 @@ Next we will save the following Java code in a file named \textbf{WordCount.java
 
 \paragraph{WordCount.java} \footnote{Source: https://hadoop.apache.org/docs/r3.3.1/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html}
 
-\begin{lstlisting}[language=java, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
+\begin{lstlisting}[language=java, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
 import java.io.IOException;
 import java.util.StringTokenizer;
 
@@ -1022,34 +1023,34 @@ public static void main(String[] args) throws Exception {
 To compile this program, Java needs to know where to find the present Hadoop libraries.
 One way to specify the locations of our libraries for the Java compiler is to add their paths to the \textbf{CLASSPATH} environment variable.
 
-\begin{lstlisting}[language=bash, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
 export CLASSPATH="/usr/local/hadoop/share/hadoop/common/hadoop-common-3.3.1.jar:/usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-common-3.3.1.jar:/usr/local/hadoop/share/hadoop/common/lib/commons-cli-1.2.jar:/usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-core-3.3.1.jar"
 \end{lstlisting}
 
 Them, we can compile our WordCount.java file with the following command:
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 javac WordCount.java
 \end{lstlisting}
 
 Next, package our newly compiled program in a JAR archive named \textbf{wc.jar}
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 jar -cf wc.jar WordCount*.class
 \end{lstlisting}
 
-Finally, we will launch our MapReduce program by indicating as input the HDFS directory (/user/hdoop/example) where the \textbf{test\_file\_1.txt} and \textbf{test\_file\_2.txt} files are located and, as output, the directory (/user/hdb/output\_example)  where the results will be saved.
+Finally, we will launch our MapReduce program by indicating as input the HDFS directory (/user/hdoop/example) where the \textbf{test\_file\_1.txt} and \textbf{test\_file\_2.txt} files are located and, as output, the directory (/user/hdoop/output\_example)  where the results will be saved.
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hadoop jar wc.jar WordCount /user/hdoop/example /user/hdoop/output_example
 \end{lstlisting}
 
 To verify the results of our MapReduce program, we will list the contents of the \textbf{output\_example} directory.
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hadoop fs -ls  /user/hdoop/output_example
 \end{lstlisting}
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 Found 2 items
 -rw-r--r--   3 hdoop supergroup          0 2021-09-29 07:59 /user/hdoop/output_example/_SUCCESS
 -rw-r--r--   3 hdoop supergroup         47 2021-09-29 07:59 /user/hdoop/output_example/part-r-00000
@@ -1061,11 +1062,11 @@ The number of result files names \textbf{part-r-XXXXX} depends on the number of 
 
 To print the result file content to standart output we can use the following command:
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hadoop fs -cat  /user/hdoop/output_example/part-r-*
 \end{lstlisting}
  
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 Bye		1
 HDFS		1
 Hadoop		1
@@ -1084,9 +1085,13 @@ The SQL language of Hive is called Hive Query Language (HiveQL or HQL).
 HiveQL is pretty similar to regular SQL.
 Though, it does not fully support all SQL-95 features \footnote{https://dwgeek.com/what-are-sql-features-missing-in-hive.html/} and has some differences in syntax.
 While Hive might seem to be a database, it is not a database per se. 
-Instead, It provides a perception of a database with tables and rows based on data stored on a filesystem.
+Instead, it provides a perception of a database with tables and rows based on data stored on a filesystem.
 One of Hive's typical use cases is to map data stored on HDFS into databases and tables and then process it with HiveQL.
 However, Hive can also interact with many other storage systems and databases like MySQL, MongoDB, Oracle, and HBase.
+When Hive receives a query, it transforms it into a sequence of MapReduce tasks and submits them to YARN.
+This approach enables Hive to execute queries at the scale of the underlining Hadoop cluster.
+
+\paragraph{Hive architecture}\mbox{}\\
 
 \begin{figure}[ht]
 	\centering
@@ -1096,39 +1101,40 @@ However, Hive can also interact with many other storage systems and databases li
 
 \footnotetext{Source: T. White, Hadoop: the definitive guide; [storage and analysis at Internet scale], 4. ed., Updated Beijing: O'Reilly, 2015. p.480}
 
-\paragraph{Hive architecture}\mbox{}\\
-
-Hive exposes a list of services and functionalities:
+At a very high level, the architecture of Hive has three principal components: \textbf{Metastore}, \textbf{HiveServer2}, and \textbf{Beeline}.
 
 \begin{itemize}
+
 \item
-Il propose 2 clients pour interagir avec Hive. 
-CLI (Hive Command line-interface) est le client Shell par défaut. 
-Beeline aussi une interface de line de commande ayant les mêmes fonctionnalités que le CLI avec la possibilité de connecté avec HiveServer 2 à travers un connecteur JDBC.
+The \textbf{Metastore} is a service that stores metadata about Hives databases and tables in a relational database (RDBMS).
+By default, the Metastore uses an embedded Apache Derby database
+which is limited to only one client connection.
+Therefore it is recommended to configure Hive to use an external database.
+The user installing Hive on their system can choose any DataNucleus compliant relational database for the Hive Metastore (like MySQL, Oracle, Postgres).
+There are two ways to run the Metastore service: either in embedded mode or in server mode.
+In the embedded mode, the Metastore service works as a library inside the HiveServer2 process.
+In server mode, the Metastore runs as a separate process which might or might not be on the same machine where the HiveServer2 service runs.
+
 \item
-HiveServer2 est un service fournissant la possibilité de la connexion de multi utilisateurs (application) et d’authentification à Hive à travers Thrift, JDBC, et ODBC. 
+The \textbf{HiveServer2} is a server that listens for client query submissions and executes them with the help of the Hive driver library.
+When the HiveServer receives a query, it first tries to parse it, then generates an execution plan using the metadata present in the \textbf{Metastore} and optimizes it.
+The execution plan consists of a directed acyclic graph of Map/Reduce jobs.
+Finally, Hive submits the generated Map/Reduce jobs to a configured execution engine and monitors the execution of the jobs until they are complete.
+Hive supports three execution engines: Map/Reduce (YARN), Tez, and Spark.
+By default, it uses the Map/Reduce engine.
+However, for faster (in-memory) query execution, it is recommended to use Tez (for Hadoop version 2) or Spark.
+
 \item
-Hive Metastore est un service là pour le stockage des métadonnées concernant la structure des tables et des colonnes associées.
-Il rend à l’utilisateur une vision de base de données structurée.
-HCatalog est un API qui permet à d’autres applications d’avoir accès aux métadonnées de Hive Metastore.
-Hive Metastore peut être configuré de 3 manières : 
-	\begin{itemize}
-	\item
-	Embedded Metastore (Figure 2- 9) : ce mode utilise Derby comme base de données. La base Metastore et le service de Hive Metastore tournent dans le même processus d’exécution que Hive Server. Il ne peut qu’avoir qu’un utilisateur à la fois.
-	\item
-	Local Metastore (Figure 2 - 11) : Dans ce mode le service de Hive Metastore tourne dans le même processus d’exécution de HiveServer mais la base de Metastore tourne dans un processus différent et peut être dans un serveur distant.
-	\item
-	Remote Metastore (Figure 2 - 10) : dans ce mode, le service d’Hive Metastore s’exécute dans un processus séparé de Hive Server et de meme que la base Metastore.
-HiveServer2, Hcatalog et autre communique lui un API Thrift.
-	\end{itemize}
+The \textbf{beeline} client is a command-line interface used to connect to the HiveServer2 and submit HiveQL queries.
+
 \end{itemize}
 
-En mode Local et Remote Metastore, le service Hive Metastore utilise un pilote JDBC pour communiquer à la base Metastore. 
+One of Hive's valuable additional services is \textbf{Hcatalog} which works on top of the \textbf{Metastore} and provides an API to access Hive databases and tables for other tools such as Pig or Flink.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=6cm]{hiveEmbeddedMetaStore}
-	\caption[Schéma processus Hive en mode Embedded Metastore]{Schéma de l'architecture de fonctionnement interne de Hive \footnotemark}
+	\caption[Hive Architecture with Embedded Metastore and Database]{Hive Architecture with Embedded Metastore and Database\footnotemark}
 \end{figure}
 
 \footnotetext{Source : \url{http://www.cloudera.com/documentation/cdh/5-1-x/CDH5-Installation-Guide/cdh5ig_hive_metastore\_configure.html}}
@@ -1137,269 +1143,231 @@ En mode Local et Remote Metastore, le service Hive Metastore utilise un pilote J
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=6cm]{hiveRemoteMetaStore}
-	\caption[Schéma processus Hive en mode Remote Metastore]{Schéma processus Hive en mode Remote Metastore}
+	\caption[Hive architecture with Metastore in server mode and external database]{Hive architecture with Metastore in server mode and external database}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=6cm]{hiveLocalMetaStore}
-	\caption[Schéma processus Hive en mode Local Metastore]{Schéma processus Hive en mode Local Metastore}
+	\includegraphics[width=6cm]{hiveLocalMetastore}
+	\caption[Hive architecture with embedded Metastore and external database]{Hive architecture with embedded Metastore and external database}
 \end{figure}
 
-\subsection{Installation de Hive 2.3.0 dans un cluster Hadoop}
+\subsection{Installing Hive 3.1.2 on a Hadoop cluster}
 
-Cette section montre comment installer Hive sur un cluster d’Hadoop existant (cluster configuré précédemment). Comme on peut voir sur le schéma suivant (figure x), Hive sera mis sur le nœud maitre (Master Node). La configuration sera en « Mode Remote » avec la base de données MySQL pour le stockage des métadonnées en provenance du service de Hive Metastore.
+This section will demonstrate how to install Hive on an existing (previously configured) Hadoop cluster.
+As shown in Figure ~\ref{fig:hiveInstallation}, we will install Hive on the Master Node.
+Regarding the Metastore service, we will configure it to run in server mode with an external MySQL database.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{hiveCluster}
-	\caption{Schéma de configuration de Hive sur le cluster d'Hadoop}
+	\caption{Hive installation on the Hadoop cluster}
+        \label{fig:hiveInstallation}
 \end{figure}
 
-\subsubsection{Prérequis}
+\subsubsection{Prerequisites}
 
-Pour cette configuration de Hive, l’installation du cluster Hadoop doit être déjà mise en place, avec toutes les configurations nécessaires tel que Java 8, création de l’utilisateur, configuration de fichier /etc/hosts (voir section 2.5).
+For this Hive configuration, the Hadoop cluster installation must already be in place, with all necessary configurations (see section 2.5).
 
-\subsubsection{Pré-configuration pour Hive}
+\subsubsection{Hive 3.1.2 installation}
 
-Pour la configuration de Hive qui sera effectué, des mises en place sont nécessaires avant de passer à son installation.
-Dans une première étape, s’effectuera l’installation, configuration de MySQL et mise en place de la base de données pour les données du service de Hive Metastore.
-Dans un second temps, s’effectuera la création de répertoires d’utilisation de Hive dans HDFS.
+The installation process for Hive is quite similar to Hadoop.
+We will download the pre-compiled Hive sources archive from the official website (https://hive.apache.org/) into the "/usr/local" directory using the "wget" shell command.
+Here we use Hive version 3.1.2.
 
-\paragraph{Installation de MySQL pour Hive Metastore}\mbox{}\\
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+cd /usr/local/
+sudo wget https://dlcdn.apache.org/hive/hive-3.1.2/apache-hive-3.1.2-bin.tar.gz
+\end{lstlisting}
 
+As for Hadoop, we will unzip the downloaded archive, give the Hadoop user ownership over the directory and create a handy alias to simplify the access to the directory.
 
-Lancer cette commande pour procéder à l’installation de MySQL
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+sudo tar -zxf apache-hive-3.1.2-bin.tar.gz
+sudo chown hdoop:hdoop -R /usr/local/apache-hive-3.1.2-bin
+sudo ln -s /usr/local/apache-hive-3.1.2-bin /usr/local/hive
+\end{lstlisting}
 
-\begin{lstlisting}[language=bash, frame=single]
+Before continuing the actual Hive installation, we will prepare our environment.
+First, we will install the MySQL database for the Hive Metastore on the Master node.
+Then, we will prepare relevant HDFS directories required by Hive.
+
+\paragraph{Installing MySQL for Hive Metastore on Ubuntu 20.04.1}\mbox{}\\
+
+To install MySQL on the master node we will execute the following command in the terminal:
+
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo apt-get install mysql-server
 \end{lstlisting}
 
-Lancer les services de MySQL
+After installation, the MySQL service should be up and running.
+To double check, we can use the following command:
 
-\begin{lstlisting}[language=bash, frame=single]
-sudo service mysql start
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+sudo systemctl status mysql
 \end{lstlisting}
 
-Installation du connecteur de MySQL.
-Ce connecteur permettra à Hive Metastore service de se connecter à la base de données qui sera créée dans MySQL.
-Hive fait usage de pilote JDBC pour communiquer avec MySQL.
+We should also install the java connector for the MySQL database so the Hive Metastore service would know how to communicate with it. For that, we can refer to the official MySQL website to fetch the \textbf{mysql-connector-java} deb package and install it. We will also create a symbolic link of the connector in the /usr/local/hive/lib directory to give Hive direct access.
 
-\begin{lstlisting}[language=bash, frame=single]
-sudo apt-get install libmysql-java
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java_8.0.26-1ubuntu20.04_all.deb
+sudo dpkg -i ./mysql-connector-java_8.0.26-1ubuntu20.04_all.deb
+sudo ln -s /usr/share/java/mysql-connector-java-8.0.26.jar /usr/local/hive/lib/
 \end{lstlisting}
 
-Création d’un lien symbolique dans le répertoire lib de Hive afin qu’il puise avoir une référence dans connecteur JDBC chez lui.
+Next, let us secure our MySQL installation:
 
-\begin{lstlisting}[language=bash, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
-sudo ln -s /usr/share/java/mysql-connector-java.jar /usr/local/hive/lib/mysql-connector-java.jar
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+sudo mysql_secure_installation
 \end{lstlisting}
 
-Renforcement de sécurité de MySQL avec l’utilitaire de sécurité
+The command will prompt a couple of questions to which we respond like shown below:
 
-\begin{lstlisting}[language=bash, frame=single]
-sudo /usr/bin/mysql_secure_installation
-\end{lstlisting}
-
-Faites comme suit :
-
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 ...
-Enter current password for root (enter for none):
-OK, successfully used password, moving on...
-...
-Set root password? [Y/n] y
-New password:
-Re-enter new password:
-Remove anonymous users? [Y/n] Y
-...
-Disallow root login remotely? [Y/n] N
-...
-Remove test database and access to it [Y/n] Y
-...
-Reload privilege tables now? [Y/n] Y
-All done!
+Would you like to setup VALIDATE PASSWORD component?: y
+Please enter 0 = LOW, 1 = MEDIUM and 2 = STRONG: 2
+Please set the password for root here.
+New password: ************
+Re-enter new password:  ************
+Estimated strength of the password: 100 
+Do you wish to continue with the password provided?: y
+Remove anonymous users?: y
+Disallow root login remotely?: y
+Remove test database and access to it?: y
+Reload privilege tables now?: y
+All done! 
 \end{lstlisting}
 
-Changer le paramètre bind-address dans le fichier mysqld.cnf par son adresse IP du serveur pour avoir un accès distant à la base de données.
+After this, we will update the "bind-address" of the MySQL server in the "mysqld.cnf" file with its local IP address.
+Setting up the "bind-address" property enables us to connect to the MySQL server from other machines in the (local) network.
 
-\begin{lstlisting}[language=bash, frame=single]
-sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf 
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf 
 \end{lstlisting}
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 #find this line and change localhost to your server-ip
 bind-address            = 192.168.2.120
 \end{lstlisting}
 
-Connecter en tant que root à MySQL
+For this change to take effect, it is required to restart the MySQL service.
+However, beforehand, we will log in as root to MySQL and create a Hive user with a metastore database.
 
-\begin{lstlisting}[language=bash, frame=single]
-mysql -u root -p
-enter password:
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+sudo mysql -uroot
 \end{lstlisting}
 
-Dans l’invite de commande de MySQL, utiliser la commande suivante pour créer la base de données de Hive Metastore à partir du fichier hive-schema-2.3.0.mysql.sql qui permet de créer la base de données de MySQL pour la version 2.3.0 de Hive.
-Ce script se trouve déjà à votre disposition dans les répertoires de Hive.
-
-\begin{lstlisting}[language=SQL, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
-CREATE DATABASE metastore;
+\begin{lstlisting}[language=SQL, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
+CREATE DATABASE IF NOT EXISTS metastore;
 USE metastore;
-SOURCE  /usr/local/hive-2.3.0/scripts/metastore/upgrade/mysql/hive-schema-2.3.0.mysql.sql
-\end{lstlisting}
-
-Toujours dans l’invite de commande de MySQL, passer les commandes suivantes pour la creation de l’utilisateur hive pour donner access à la base metastore au service de Hive. 
-
-\begin{lstlisting}[language=SQL, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
-CREATE USER 'hive'@'hdmaster' IDENTIFIED BY 'hive!hive';
-REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'hive'@'hdmaster';
-GRANT ALL PRIVILEGES ON metastore.* TO 'hive'@'hdmaster';
-
-CREATE USER 'hive'@'%' IDENTIFIED BY 'hive!hive';
+CREATE USER 'hive'@'%' IDENTIFIED BY 'hive!Hive1';
 REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'hive'@'%';
 GRANT ALL PRIVILEGES ON metastore.* TO 'hive'@'%';
-
-CREATE USER 'hive'@'192.168.2.120' IDENTIFIED BY 'hive!hive';
-REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'hive'@'192.168.2.120';
-GRANT ALL PRIVILEGES ON metastore.* TO 'hive'@'192.168.2.120';
 FLUSH PRIVILEGES;
 quit;
 \end{lstlisting}
 
-Arrêter et redémarrer le démon de MySQL pour prendre en compte les modifications des fichiers de configuration.
+Now we will restart the MySQL service:
 
-\begin{lstlisting}[language=bash, frame=single]
-sudo /etc/init.d/mysql stop
-sudo /etc/init.d/mysql start
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+sudo systemctl restart mysql
 \end{lstlisting}
 
-Verifier bien si l’utilisateur hive à la possibilité de se connecter à MySQL à l’hôte hdmaster 
+To check that the hive user can connect to the database, we will use the following command:
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 mysql -h hdmaster -u hive -p
+Enter password: hive!Hive1
+quit
 \end{lstlisting}
 
-\paragraph{Creation des répertoires d’utilisation de Hive dans HDFS}
+\paragraph{Create Hive directories in HDFS}
 
-Créer dans HDFS  2 répertoires et assigner les droit lecture et écriture :  /tmp répertoire de données temporaire de Hive lors de l’exécution de tâches et /user/hive/warehouse répertoire pour la création des bases et tables. 
+There are two directories in HDFS that our Hive installation requires.
+One is the Hive scratch directory, used for storing temporary data related to execution outputs and plans.
+By default, it points to "/tmp" in HDFS.
+The second is the metastore data warehouse directory, used as the default HDFS directory to store Hive's databases and tables data files.
+For that purpose, Hive uses the "/user/hive/warehouse" HDFS directory by default.
+We will not change these defaults in our current installation, although we could, by setting new values in the Hive configuration file "hive-site.xml" located in the Hive installation directory at "/usr/local/hive/conf/hive-site.xml".
+However, we have to create these two directories in advance and set appropriate permissions for them.
 
-\begin{lstlisting}[language=bash, frame=single]
-hdfs dfs -mkdir       /tmp
-hdfs dfs -mkdir       /user/hive/warehouse
-
-hdfs dfs -chmod g+w   /tmp
-hdfs dfs -chmod g+w   /user/hive/warehouse
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+hadoop fs -mkdir -p /tmp
+hadoop fs -mkdir -p /user/hive/warehouse
+hadoop fs -chmod g+w /tmp
+hadoop fs -chmod g+w /user/hive/warehouse
 \end{lstlisting}
 
-\paragraph{Installation de Hive}\mbox{}\\
+\paragraph{Setting up Hive's environment variables}
 
-On fera usage de la version 2.2.0 de Hive.
-La version binaire d’Apache Hive peut être récupéré sur le site officiel (https://hive.apache.org/)
-Allez dans le répertoire partager pour que Hive puisse être exécuté par un autre utilisateur.
-Nous faisons le choix du répertoire /usr/local/ pour l’installation comme pour l’installation d’Hadoop.
+Some of Hive's configurations rely on environment variables.
+To set these variables at each login, we will switch to the Hadoop user and define them in the ".profile" at the \$HOME directory.
 
-\begin{lstlisting}[language=bash, frame=single]
-cd /usr/local/ 
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+sudo su hdoop
+vim /home/hdoop/.profile
 \end{lstlisting}
 
-Allez sur le site offciel de hive dans téléchargement pour trouver le lien.
-
-\begin{lstlisting}[language=bash, frame=single]
-sudo wget http://apache.mirrors.ovh.net/ftp.apache.org/dist/hive/hive-2.3.0/apache-hive-2.3.0-bin.tar.gz
-\end{lstlisting}
-
-Désarchiver le fichier nouvellement téléchargé (ici apache-hive-2.3.0-bin.tar.gz) et renommer le répertoire obtenu en hive-2.3.0.
-
-\begin{lstlisting}[language=bash, frame=single]
-sudo tar -zxf apache-hive-2.3.0-bin.tar.gz
-sudo mv apache-hive-2.3.0-bin hive-2.3.0
-\end{lstlisting}
-
-Donner l’utilisateur hdb la propriété sur répertoire
-
-\begin{lstlisting}[language=bash, frame=single]
-sudo chown hdb:hadoop -R /usr/local/hive-2.3.0
-\end{lstlisting}
-
-\paragraph{Mise en place des variables d’environnement d’Hive}
-
-Se connecter en tant que hdb
-
-\begin{lstlisting}[language=bash, frame=single]
-sudo su hdb
-\end{lstlisting}
-
-Ajouter les variables d’environnement d’Hive dans le fichier profile de l’utilisateur hdb
-
-\begin{lstlisting}[language=bash, frame=single]
-nano /home/hdb/.bashrc
-\end{lstlisting}
-
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 #Add to the end of this file 
 # -- HIVE ENVIRONMENT VARIABLE START -- #
-export HIVE_HOME=/usr/local/hive-2.3.0
+export HIVE_HOME=/usr/local/hive
+export METASTORE_HOME=$HIVE_HOME
 export PATH=$PATH:$HIVE_HOME/bin
-export CLASSPATH=$CLASSPATH:usr/local/hadoop-2.8.0/lib/*:.
-export CLASSPATH=$CLASSPATH:/usr/local/hive-2.3.0/lib/*:.
-
 # -- HIVE ENVIRONMENT VARIABLE END -- #
 \end{lstlisting}
 
-Rendre la modification du fichier profile active immédiatement
-\begin{lstlisting}[language=bash, frame=single]
-source /home/hdb/.bashrc
+To make the change in profile file effective immediately, we could use the next command:
+
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+source /home/hdoop/.profile
 \end{lstlisting}
 
-\paragraph{Configuration de Hive en mode « Remote Metastore » }\mbox{}\\
+\paragraph{Configure Hive}\mbox{}\\
 
-Référencer dans hive-config.sh le répertoire d’utilisation d’Hadoop
+Up until now, we have avoided configuring Hive via its main configuration file "/usr/local/hive/conf/hive-site.xml" by relying on the default values.
+However, at this stage, we need to update it to make the Hive Metastore use our previously installed MySQL database.
 
-\begin{lstlisting}[language=bash, frame=single]
-sudo nano /usr/local/hive-2.3.0/bin/hive-config.sh 
-\end{lstlisting}
+By default, there is no "hive-site.xml" file present in the Hive configuration directory (/usr/local/hive/conf).
+We will have to create it ourselves.
+Fortunately, Hive provides a template with various configuration properties set to their defaults, which we can use to bootstrap the "hive-site.xml" file and update it to our needs.
 
-Chercher dans le fichier les lignes suivantes :
-\begin{lstlisting}[language=bash, frame=single]
-# Allow alternate conf dir location.
-HIVE_CONF_DIR="${HIVE_CONF_DIR:-$HIVE_HOME/conf"
-export HIVE_CONF_DIR=$HIVE_CONF_DIR
-export HIVE_AUX_JARS_PATH=$HIVE_AUX_JARS_PATH
-\end{lstlisting}
-
-Ajouter en dessous de ces lignes
-
-\begin{lstlisting}[language=bash, frame=single]
-export HADOOP_HOME=/usr/local/hadoop-2.8.0
-\end{lstlisting}
-
-Créer le fichier hive-site.xml à partir de la version par défaut fourni et l’éditer pour faire la configuration de Hive en mode Remonte Metastore.
-Ce fichier permet d’indiquer à Hive les paramètre de connexion à la base et le nom des répertoires dans HDFS son utilisation.
-
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+cd /usr/local/hive/conf
 cp hive-default.xml.template hive-site.xml
-sudo gedit /usr/local/hive-2.3.0/conf/hive-site.xml 
+vim hive-site.xml 
 \end{lstlisting}
 
-Utilisez la commande ctrl + f pour accéder à l’option de rechercher (« find ») sur gedit afin de rechercher le nom (clef <name>) de votre propriété dont vous avez besoin et mettre les valeurs (clef <value>) nécessaires. 
-
-\begin{lstlisting}[language=XML, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
+In the hive-site.xml file, we now need to add the \textbf{system:java.io.tmpdir} property to indicate Hive's default temporary directory on HDFS.
+Furthermore, we will edit the following properties:
+\begin{itemize}
+\item
+The \textbf{javax.jdo.option.ConnectionURL} property to point to our MySQL database.
+\item
+The \textbf{javax.jdo.option.ConnectionDriverName} property to inidicate the required JDO driver to use for the database connection.
+\item
+The \textbf{javax.jdo.option.ConnectionUserName} property to specify the username for the MySQL connection.
+\item
+The \textbf{javax.jdo.option.ConnectionPassword} property to specify the password for the MySQL connection.
+\item
+The \textbf{hive.metastore.uris} property to run the metastore as an external service.
+\end{itemize}
+\begin{lstlisting}[language=XML, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
+<property>
+    <name>system:java.io.tmpdir</name>
+    <value>/tmp</value>
+</property>
 <property>
     <name>javax.jdo.option.ConnectionURL</name>
     <value>jdbc:mysql://hdmaster:3306/metastore</value>
-    <description>
-      JDBC connect string for a JDBC metastore.
-      To use SSL to encrypt/authenticate the connection, provide database-specific SSL flag in the connection URL.
-      For example, jdbc:postgresql://myhost/db?ssl=true for postgres database.
-    </description>
+    <description>JDBC connect string for a JDBC metastore</description>
 </property>
-
 <property>
     <name>javax.jdo.option.ConnectionDriverName</name>
-    <value>com.mysql.jdbc.Driver</value>
+    <value>com.mysql.cj.jdbc.Driver</value>
     <description>Driver class name for a JDBC metastore</description>
 </property>
-
 <property>
     <name>javax.jdo.option.ConnectionUserName</name>
     <value>hive</value>
@@ -1407,170 +1375,185 @@ Utilisez la commande ctrl + f pour accéder à l’option de rechercher (« fin
 </property>
 <property>
     <name>javax.jdo.option.ConnectionPassword</name>
-    <value>hive!hive</value>
+    <value>hive!Hive1</value>
     <description>password to use against metastore database</description>
 </property>
-
 <property>
     <name>hive.metastore.uris</name>
-    <value>thrift://192.168.2.120:9083</value>
+    <value>thrift://hdmaster:9083</value>
     <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>
   </property>
+  <property>
+    <name>hive.server2.logging.operation.level</name>
+    <value>VERBOSE</value>
+    <description>none, execution, performance, verbose</description>
+  </property>
+\end{lstlisting}
 
+Another valuable configuration of Hive is named \textbf{hive.server2.enable.doAs} which controls if Hive should run received queries on behalf of the user that submitted them to Hive or if Hive should run them with the user who started the Hiveserver2.
+The default of this value is \textbf{true}, which means that when a client submits a query to Hive, the user that runs the HiveServer2 service will impersonate itself as the submitting user and execute the query on his behalf.
+However, a user that accesses HDFS and runs MapReduce jobs on behalf of another user needs special permission to do so on Hadoop.
+We will give this permission to our \textbf{hdoop} user, which will also run the HiveServer2 by adding the following lines to the "core-site.xml" Hadoop configuration file located at \textbf{/usr/local/hadoop/etc/hadoop/core-site.xml}.
+
+\begin{lstlisting}[language=XML, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
 <property>
-    <name>hive.metastore.warehouse.dir</name>
-    <value>/user/hive/warehouse</value>
-    <description>location of default database for the warehouse</description>
+    <name>hadoop.proxyuser.hdoop.hosts</name>
+    <value>hdmaster</value>
 </property>
-
 <property>
-    <name>hive.exec.local.scratchdir</name>
-    <value>/tmp/hive</value>
-    <description>Local scratch space for Hive jobs</description>
-</property>
-
-<property>
-    <name>hive.downloaded.resources.dir</name>
-    <value>/tmp/hive/${hive.session.id}_resources</value>
-    <description>Temporary local directory for added resources in the remote file system.</description>
-</property>
-
-<property>
-    <name>hive.scratch.dir.permission</name>
-    <value>777</value>
-    <description>The permission for the user specific scratch directories that get created.</description>
+    <name>hadoop.proxyuser.hdoop.groups</name>
+    <value>hdoop</value>
 </property>
 \end{lstlisting}
 
-\subsubsection{Démarrage des services de Hive}
+\subsubsection{Starting Hive services}
 
-Pour pouvoir se connecter, créer et manipuler des données sur Hive, il est necessaire de lancer ses services. Le service Metastore lancer et en exécution permet dès et déjà de pouvoir tirer usage du client CLI de Hive.  Le service de HiveServer2, d'un autre côté, doit être en exécution si nécessaire de connecter d’autres types d’application à Hive.  Car c’est ce service qui fait office de médium d’accès à Beeline et autres langages de programmation. Il faut aussi assurer que les démons Hadoop (HDFS et Yarn) sont bien démarrés.
+To connect, create and manipulate data on Hive via the Beeline client, we need first to launch its Metastore and HiveServer2 services.
+However, we should ensure that the Hadoop daemons (HDFS and Yarn) are up and running before the launch.
+Also, before launching the Hive Metastore for the first time, it is required to initialize the database schema.
+As we have added the Hive bin directory in our path, we can use Hive's \textbf{schematool} utility for this task.
 
-Démarrer le service Metastore de Hive
-
-\begin{lstlisting}[language=bash, frame=single]
-hive   --service metastore
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+schematool -initSchema -dbType mysql
 \end{lstlisting}
 
-A cette étape-là, Le client de base de Hive, CLI permet déjà de faire des manipulations au niveau de la base de données de Hive.
+After the initialization finishes, we can start the Hive Metastore service with the following command in the terminal as the Hadoop user:
 
-Utilisation du client CLI :
-\begin{lstlisting}[language=bash, frame=single]
-hive 
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+nohup hive --service metastore > /dev/null &
 \end{lstlisting}
 
-Dans le client CLI hive, passer les commandes suivantes :
+In this command, we use the \textbf{nohub} command to prevent the metastore service from stopping when we log out of the system.
+Also, note that we are discarding the output of \textbf{nohub} by redirecting it to \textbf{/dev/null} because Hive already handles the persistence of his logs, and by default, it writes them in the \
+\textbf{/tmp/{username}/hive.log} file on the local machine.
 
-\begin{lstlisting}[language=bash, frame=single]
-hive> show databases;
-hive> use default;
-hive> show tables;
+Next, we will start the HiveServer2 service in a similar manner:
+
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+nohup hiveserver2 > /dev/null &
 \end{lstlisting}
 
-« show databases » pour afficher la liste des base de données, « use default » pour indiquer l’utilisation de la base de données « default », base par défaut  de hive, « show tables » pour voir la liste des tables dans la base indiquée.
 
-Démarrer le service HiveServer2 de Hive
+At this stage, we can launch the Hive's beeline client to connect and manipulate the Hive database with the \textbf{hdoop} user.
 
-\begin{lstlisting}[language=bash, frame=single]
-hiveserver2
-\end{lstlisting}
-
-Les services HiveServer2 est nécessaire pour se connecter à Hive à travers le client Beeline et d’autres programme voulant s’y connecter
-
-Une fois ce service lancé, les autres types clients incluant Beeline peuvent se connecter à la base de données de Hive.
-Utilisation du client Beeline :
-
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 beeline
 \end{lstlisting}
 
-Connecter à Hive à travers Beeline
-
-\begin{lstlisting}[language=bash, frame=single]
-beeline> !connect jdbc:hive2://192.168.2.120:10000/  "" ""
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+beeline> !connect jdbc:hive2://192.168.2.120:10000/ hdoop ""
 \end{lstlisting}
 
-\subsubsection{Exemple simple d’utilisation de Hive}
+Finally, to try out some commands on Hive we can write the following in the beeline prompt:
 
-Dans cet exemple, montre la création d’une base « movielens » et la création d’une table « m\_rating » qui sera remplie à partir d’un fichier.
-L’exemple utilise les données et fichiers en provenance de « Grouplens ».
-voir lien permanant de « MovieLens 100K Dataset » pour plus d’information (http://grouplens.org/datasets/movielens/100k/). 
-
-Se connecter à Hive à travers Beeline pour procéder à la creation de la Base de données « movielens ». Utiliser l’instruction qui suite :
-
-\begin{lstlisting}[language=bash, frame=single]
-beeline>CREATE DATABASE movielens;
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+beeline> show databases;
+beeline> use default;
+beeline> show tables;
 \end{lstlisting}
 
-Indiquer l’utilisation de la base movielens avec le mot clef USE :
+The "show databases;" command returns the list of Hive databases.
+« use default » selects the database named default as the default database.
+« show tables » returns a list of tables in the currently selected database.
 
-\begin{lstlisting}[language=bash, frame=single]
-beeline> USE movielens;
+\subsubsection{Simple Hive usage example}
+
+The data for this example comes from the "MovieLens 100K" Dataset
+\footnote{
+F. Maxwell Harper and Joseph A. Konstan. 2015. The MovieLens Datasets:
+History and Context. ACM Transactions on Interactive Intelligent
+Systems (TiiS) 5, 4, Article 19 (December 2015), 19 pages.
+DOI=http://dx.doi.org/10.1145/2827872},
+made publicly available by the "GroupLens" research lab.
+(See https://grouplens.org/datasets/movielens/100k/ for more information).
+We are interested in the \textbf{u.data} file, which consists of a tab-separated list of movie ratings made by various users.
+Each line of the file contains the movie ID, the user ID, the rating, and a timestamp.
+In this example, we will create a "movielens" database containing a "m\_rating" table pointing to this file on HDFS.
+
+To start, we will log in as the Hadoop user, download the dataset on our local filesystem, unzip it and load it to HDFS:
+
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
+su - hdoop
+wget  http://files.grouplens.org/datasets/movielens/ml-100k.zip
+unzip  ml-100k.zip
+hadoop fs -put ml-100k
 \end{lstlisting}
 
-Utiliser cette instruction pour créer une tables nommée m\_rating dans la base nouvellement créée :
+Next, we will connect to Hive using the beeline client, and create the \textbf{movielens} database:
 
-\begin{lstlisting}[language=SQL, frame=single]
-CREATE TABLE m_rating (
-u_id INT,
-m_id INT,
-rating INT,
-timestmp STRING)
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+beeline
+beeline>!connect jdbc:hive2://192.168.2.120:10000/ hdoop ""
+beeline>CREATE DATABASE IF NOT EXISTS movielens;
+\end{lstlisting}
+
+Then, we will switch to the \textbf{movielens} database:
+
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+beeline>USE movielens;
+\end{lstlisting}
+
+After that we will create a table named \textbf{rating} with the following HiveQL statement:
+
+\begin{lstlisting}[language=SQL, frame=single, basicstyle=\footnotesize]
+CREATE EXTERNAL TABLE rating (
+	user_id INT,
+	movie_id INT,
+	rating INT,
+	rating_timestamp STRING
+)
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY '\t'
 STORED AS TEXTFILE;
 \end{lstlisting}
 
-Télécharger le fichier zip de MovieLens en le plaçant dans le répertoire par défaut de l’utilisateur hdb et le désarchiver en étant hors de Beeline.  
+This statement specifies the fields (user\_id, movie\_id, rating, timestamp) and their types (INT, STRING) of the Hive table.
+It also indicates the table-related data source (STORED AS TEXTFILE) and format (ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t').
 
-\begin{lstlisting}[language=bash, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
-sudo su hdb
-cd ~
-wget  http://files.grouplens.org/datasets/movielens/ml-100k.zip
-unzip  ml-100k.zip
+With the table schema defined, it is now time to fill it with the data contained in the \textbf{u.data} file.
+
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+LOAD DATA INPATH '/user/hdoop/ml-100k/u.data'
+OVERWRITE INTO TABLE rating;
 \end{lstlisting}
 
-Retourner dans Beeline pour charger le fichier u.data et insérer les lignes dans la tables m\_rating en utilisant l’instruction suivante :
+Note that the "LOAD DATA INPATH" statement will move the '/user/hdoop/ml-100k/u.data' to the '/user/hive/warehouse/movielens.db/rating/' directory.
 
-\begin{lstlisting}[language=bash, frame=single]
-LOAD DATA LOCAL INPATH '/home/hdb/ml-100k/u.data'
-OVERWRITE INTO TABLE m_rating;
+We can now use the following query to check whether we have loaded the rows into the table.
+The query should output the first ten results or the rating table.
+
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+beeline> SELECT * FROM rating LIMIT 10;
 \end{lstlisting}
 
-Vérifier si les lignes ont bien été charger dans la table avec la requête suivante.
+It would be interesting to know the average rating for each movie in decreasing order.
+To achieve that, we can use the following query.
 
-\begin{lstlisting}[language=bash, frame=single]
-beeline> select * from m_rating limit 10;
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
+beeline> SELECT movie_id, avg(rating) AS avg_rating FROM rating GROUP BY movie_id ORDER BY avg_rating DESC;
 \end{lstlisting}
 
-Cette requête permet de calculer la moyenne des Indices « rating » pour chaque film représenté par son identifiant « m\_id » 
+The result should be similar to this:
 
-\begin{lstlisting}[language=bash, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
-beeline> SELECT m_id, avg(rating) FROM m_rating GROUP BY m_id ;
-\end{lstlisting}
-
-Un aperçu du résultat partiel obtenu :
-
-\begin{lstlisting}[language=bash, frame=single]
-+-------+---------------------+--+
-| m_id  |         _c1         |
-+-------+---------------------+--+
-| 1     | 3.8783185840707963  |
-| 2     | 3.2061068702290076  |
-| 3     | 3.033333333333333   |
-| 4     | 3.550239234449761   |
-| 5     | 3.302325581395349   |
-| 6     | 3.576923076923077   |
-| 7     | 3.798469387755102   |
-| 8     | 3.9954337899543377  |
-| 9     | 3.8963210702341136  |
-| 10    | 3.831460674157303   |
-| 11    | 3.847457627118644   |
-| 12    | 4.385767790262173   |
-| 13    | 3.4184782608695654  |
-| 14    | 3.9672131147540983  |
-| 15    | 3.7781569965870307  |
-...
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
++-----------+---------------------+
+| movie_id  |     avg_rating      |
++-----------+---------------------+
+| 1467      | 5.0                 |
+| 1599      | 5.0                 |
+| 1201      | 5.0                 |
+| 1500      | 5.0                 |
+| 1293      | 5.0                 |
+| 1189      | 5.0                 |
+| 814       | 5.0                 |
+| 1653      | 5.0                 |
+| 1122      | 5.0                 |
+| 1536      | 5.0                 |
+| 1449      | 4.625               |
+| 1594      | 4.5                 |
+| 119       | 4.5                 |
+| 1398      | 4.5                 |
+| 1642      | 4.5                 |
 \end{lstlisting}
 
 \section{Spark}
@@ -1669,38 +1652,38 @@ Cette étape doit être réalisée sur toutes les machine du cluster.
 
 Aller dans le répertoire /usr/local/ comme pour l’installation des autres précédemment
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 cd /usr/local
 \end{lstlisting}
 
 Téléchargement de Scala
 
-\begin{lstlisting}[language=bash, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
 sudo wget https://downloads.lightbend.com/scala/2.11.11/scala-2.11.11.tgz
 \end{lstlisting}
 
 Désarchiver le fichier nouvellement téléchargé (ici scala-2.11.11.tgz)
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo tar -zxf  scala-2.11.11.tgz
 \end{lstlisting}
 
 Vérifier si Scala fonctionne
 Se connecter en tant que hdb
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo su hdb
 \end{lstlisting}
 
 Lancer Scala en tapant la commande suivante :
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 scala
 \end{lstlisting}
 
 Tapez cette instruction pour mettre fin à l'exécution de scala
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 :quit
 \end{lstlisting}
 
@@ -1712,32 +1695,32 @@ Allez dans un répertoire partager pour que Spark puisse être exécuté par un 
 Nous faisons le choix du répertoire /usr/local/ comme pour l’installation des autres précédemment.
 Cette étape doit être réalisée que sur le nœud « Master ».
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 cd /usr/local
 \end{lstlisting}
 
 Téléchargement de Spark
 
-\begin{lstlisting}[language=bash, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
 sudo wget http://mirrors.standaloneinstaller.com/apache/spark/spark-2.2.0/spark-2.2.0-bin-hadoop2.7.tgz
 \end{lstlisting}
 
 Désarchiver le fichier nouvellement téléchargé (ici spark-2.2.0-bin-hadoop2.7.tgz) et renommer le répertoire obtenu en spark-2.2.0.
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo tar xzf spark-2.2.0-bin-hadoop2.7.tgz 
 sudo mv spark-2.2.0-bin-hadoop2.7  spark-2.2.0
 \end{lstlisting}
 
 Donner l’utilisateur hdb la propriété sur le répertoire
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo chown hdb:hadoop spark-2.2.0
 \end{lstlisting}
 
 Aller dans le répertoire /conf/ de spark, copier le fichier modèle pour créer le fichier d’environnement Spark (spark-env.sh) et Ajouter le fichier les variables qui suit.
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 cd /usr/local/spark-2.2.0/conf/
 
 sudo cp spark-env.sh.template spark-env.sh
@@ -1745,7 +1728,7 @@ sudo cp spark-env.sh.template spark-env.sh
 sudo nano spark-env.sh
 \end{lstlisting}
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
 export SPARK_WORKER_CORES=2
@@ -1754,11 +1737,11 @@ export SPARK_WORKER_CORES=2
 Toujours dans le répertoire /conf/, éditer le fichier « slaves » les alias correspondant aux adresse IP de tous les nœuds esclaves du cluster afin d’indiquer à Spark, les machines agissant comme esclave.
 Ici, les esclaves sont « hdslave1 » et « hdslave2 »
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo nano /usr/local/spark-2.2.0/conf/slaves
 \end{lstlisting}
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hdslave1
 hdslave2
 \end{lstlisting}
@@ -1770,17 +1753,17 @@ Cette étape devra être réalisée sur toutes les machine du cluster.
 
 Se connecter en tant que hdb
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo su hdb
 \end{lstlisting}
 
 Ajouter les variables d’environnement de Spark dans le fichier profile de l’utilisateur hdb
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 nano /home/hdb/.bashrc
 \end{lstlisting}
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 # -- Spark ENVIRONMENT VARIABLE START -- #
 export SPARK_HOME=/usr/local/spark-2.2.0
 export PATH=$PATH:$SPARK_HOME/bin
@@ -1792,19 +1775,19 @@ export PATH=$PATH:$SCALA_HOME/bin
 
 Rendre la modification du fichier profile active immédiatement
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 source /home/hdb/.bashrc
 \end{lstlisting}
 
 Tester pour voir si Spark-Shell, la line de commande de spark fonctionne normalement avec la line suivante :
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 spark-shell
 \end{lstlisting}
 
 Tapez cette instruction pour mettre fin à l'exécution de spark-shell
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 :quit
 \end{lstlisting}
 
@@ -1812,7 +1795,7 @@ Tapez cette instruction pour mettre fin à l'exécution de spark-shell
 
 Créer dans HDFS le répertoire /user/spark/ et assigner les droit lecture et écriture pour l’exécution des tâches de spark. 
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hdfs dfs -mkdir       /user/spark/
 hdfs dfs -chmod g+w   /user/spark/
 \end{lstlisting}
@@ -1827,13 +1810,13 @@ La seconde sera effectuée sur les nœuds esclave. Cette seconde partie consiste
 
 Archiver le répertoire Spark avec tar :  
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo tar czf spark-2.2.0.tar.gz spark-2.2.0
 \end{lstlisting}
 
 Copier par SSH le fichier archive de Spark sur tous les nœuds esclaves avec l’utilisateur hdb à partir des commandes qui suit :
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo scp spark-2.2.0.tar.gz hdb@hdslave1:~
 sudo scp spark-2.2.0.tar.gz hdb@hdslave2:~
 \end{lstlisting}
@@ -1842,7 +1825,7 @@ sudo scp spark-2.2.0.tar.gz hdb@hdslave2:~
 
 Etant sur chaque machine esclave, aller dans le répertoire /usr/local/ , désarchiver le fichier  spark-2.2.0.tar.gz qui se trouve dans /home/hdb/ et copier le répertoire (spark-2.2.0) nouvellement crée dans /usr/local/ en utilisant les commande suivantes :
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 cd /usr/local/
 sudo tar xzf /home/hdb/spark-2.2.0.tar.gz 
 sudo cp /home/hdb/spark-2.2.0.tar.gz spark-2.2.0
@@ -1850,7 +1833,7 @@ sudo cp /home/hdb/spark-2.2.0.tar.gz spark-2.2.0
 
 Donner l’utilisateur hdb la propriété sur le répertoire de Spark
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 sudo chown hdb:hadoop spark-2.2.0
 \end{lstlisting}
 
@@ -1860,17 +1843,17 @@ Arriver dans cette étape, on peut maintenant démarrer les démons de Spark sur
 
 Lancer cette commande sur le noeud maître en tant que l’utilisateur hdb
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 $SPARK_HOME/sbin/start-all.sh 
 \end{lstlisting}
 
 Verifier sur le nœud maitre avec cette commande, si tous les démons sont en exécution. Le démon du maitre de Spark est « Master »
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 jps
 \end{lstlisting}
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 20226 ResourceManager
 19811 NameNode
 11509 Jps
@@ -1880,11 +1863,11 @@ jps
 
 Verifier sur les nœuds esclaves avec cette commande, si tous les démons sont en exécution. Le démon du nœud esclaves de Spark est « Worker »
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 jps
 \end{lstlisting}
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 8561 Jps
 8249 NodeManager
 7753 DataNode
@@ -1902,7 +1885,7 @@ Dans l’exemple, l’usage des fichiers test01 et test02 dans le répertoire /u
 
 Passer cette commande pour lancer le Spark-Shell en tant que client de yarn
 
-\begin{lstlisting}[language=bash, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
 $SPARK_HOME/bin/spark-shell --master yarn --deploy-mode client
 \end{lstlisting}
 
@@ -1910,7 +1893,7 @@ Après avoir exécuter spark-shell en tant que client yarn, exécuter le code co
 Le programme MapReduce en parametre en entrée (input) le répertoire (/user/hdb/input\_ex) dans HDFS où se trouve les fichiers test01 et test02 et en sortie (output) le répertoire (/user/hdb/output\_ex\_spark) pour le dépôt des résultats obtenus.
 A noter que les liens de connexion vers HDFS est hdfs://hdmaster:9000, avec hdmaster, l’alias du nœud maitre et le port 9000 pour de connexion au service d’HDFS.
 
-\begin{lstlisting}[language=bash, frame=single, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
 val textFile = sc.textFile("hdfs://hdmaster:9000/user/hdb/input_ex")
 val text = textFile.flatMap(line => line.split(" "))
 val map = text.map(word => (word, 1))
@@ -1923,11 +1906,11 @@ Selon le volume d’information à stocker, il peut les séparer en plusieurs pa
 
 Afficher les résultats obtenus :
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 hadoop fs -cat  /user/hdb/output_ex_spark/part-*
 \end{lstlisting}
 
-\begin{lstlisting}[language=bash, frame=single]
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 (Bye,1)
 (Welcome,1)
 (Hello,2)
@@ -1948,23 +1931,24 @@ https://www.netjstech.com/2018/05/input-splits-in-hadoop.html
 https://www.netjstech.com/2018/04/data-locality-in-hadoop.html		
 
 
-[1]T. White, Hadoop: the definitive guide ; [storage and analysis at Internet scale], 4. ed., Updated. Beijing: O'Reilly, 2015.
+[1]T. White, "Hadoop: the definitive guide" [storage and analysis at Internet scale], 4. ed., Updated. Beijing: O'Reilly, 2015.
 
-[2] Apache Hadoop official Documents [En Ligne] Disponible : https://wiki.apache.org/hadoop
+[2] Apache Hadoop official Documents [En Ligne] Disponible: https://wiki.apache.org/hadoop
 
-[1]Manish A. Kukreja, « Apache Hive: Enterprise SQL on Big Data frameworks ». Unpublished, 2016.
+[1]Manish A. Kukreja, "Apache Hive: Enterprise SQL on Big Data frameworks" Unpublished, 2016.
 
-[1]A. Thusoo et al., « Hive - a petabyte-scale data warehouse using Hadoop », 2010, p. 996‑1005.
+[1]A. Thusoo et al., "Hive - a petabyte-scale data warehouse using Hadoop" 2010, p. 996‑1005.
 
-[1]A. Thusoo et al., « Hive: a warehousing solution over a map-reduce framework », Proceedings of the VLDB Endowment, vol. 2, no 2, p. 1626‑1629, août 2009.
+[1]A. Thusoo et al., "Hive: a warehousing solution over a map-reduce framework" Proceedings of the VLDB Endowment, vol. 2, no 2, p. 1626‑1629, août 2009.
 
 [1]E. Capriolo, D. Wampler, et J. Rutherglen, Programming Hive: [data warehouse and query language for Hadoop], 1. ed. Beijing: O'Reilly, 2012.
 
-[1]S. Ryza, U. Laserson, S. Owen, et J. Wills, Advanced analytics with Spark, First edition. Beijing ; Sebastopol, CA: O'Reilly, 2015.
+[1]S. Ryza, U. Laserson, S. Owen, et J. Wills, Advanced analytics with Spark, First edition. Beijing; Sebastopol, CA: O'Reilly, 2015.
 
 [1]B. Chambers et M. Zaharia, Spark,  the definitive guide: big data processing made simple. 2017.
 
-[1]J. Dean et S. Ghemawat, « MapReduce: simplified data processing on large clusters », Communications of the ACM, vol. 51, no 1, p. 107‑113, janv. 2008.
+[1]J. Dean et S. Ghemawat, "MapReduce: simplified data processing on large clusters" Communications of the ACM, vol. 51, no 1, p. 107‑113, Jan. 2008.
 
 
 \end{document}
+
