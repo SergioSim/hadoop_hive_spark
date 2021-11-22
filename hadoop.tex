@@ -399,7 +399,7 @@ Lucene is a core component, and Solr is built around it, adding even more functi
 
 \subsection{Kafka}
 
-Apache Kalka \footnote{See https://kafka.apache.org/} is a distributed messaging system for publishing, subscribing and recording data stream exchanges.
+Apache Kalka \footnote{See https://kafka.apache.org/} is a distributed messaging system for publishing, subscribing, and recording data stream exchanges.
 It allows the creation of a data distribution pipeline between systems or applications. 
 
 \subsection{Storm}
@@ -424,7 +424,7 @@ Apache Mahout \footnote{See https://mahout.apache.org/} provides an environment 
 Apache Impala \footnote{See https://impala.apache.org/} and Presto \footnote{Voir https://prestodb.io/} are SQL query engines designed for Big Data.
 They are capable of processing Petabytes of data very quickly. 
 For more information on Impala, see « Impala : A Modern, Open-Source SQL Engine for Hadoop » \footnote{M. Kornacker et al., « Impala: A Modern, Open-Source SQL Engine for Hadoop. », in CIDR, 2015, vol. 1, p. 9.}
-And for Presto, see « Presto : Interacting with petabytes of data at Facebook » \footnote{"Presto: Interacting with petabytes of data at Facebook." [Online]. https://www.facebook.com/notes/facebookengineering/presto-interacting-with-petabytes-of-data-atfacebook/10151786197628920.}
+For Presto, see « Presto: Interacting with petabytes of data at Facebook » \footnote{"Presto: Interacting with petabytes of data at Facebook." [Online]. https://www.facebook.com/notes/facebookengineering/presto-interacting-with-petabytes-of-data-atfacebook/10151786197628920.}
 
 
 \section{Hadoop 3.3.1 cluster installation on Linux Ubuntu 20.04.1 LTS}
@@ -584,7 +584,7 @@ Some notable environment variables are:
 The \textbf{JAVA\_HOME} variable informs Hadoop where to find the Java installation.
 
 \item
-The \textbf{HADOOP\_HOME} variable holds the absolute path to the Hadoop installation, and the \textbf{HADOOP\_CONF\_DIR} variable points to the directory containing the Hadoop configuration files.
+The \textbf{HADOOP\_HOME} variable holds the absolute path to the Hadoop installation and the \textbf{HADOOP\_CONF\_DIR} variable points to the directory containing the Hadoop configuration files.
 Hadoop ecosystem tools often require these variables to be set in order to find Hadoop libraries and configurations.
 
 \item
@@ -1558,356 +1558,203 @@ The result should be similar to this:
 
 \section{Spark}
 
-Apache Spark est un Framework écrit en Scala pour procéder à de l’analyse de données en utilisant des processus de traitement de données en mémoire dans un environnement distribué.
+\textbf{Apache Spark} is a framework written in Scala to perform data analysis using in-memory data processing in a distributed environment.
 
-Spark et Hadoop forment un couple souvent utiliser par les entreprises pour le traitement et l’analyse de données stockées dans HDFS. La raison est d’une part Spark convient le mieux par sa capacité d’effectuer des traitements en temps réel (vitesse de traitement élevée), des analyses avancées et Hadoop en revanche, convient mieux le mieux pour le stockage de données allant de structurées au non-structurées et l’exécution de processus batch (temps différé) pour le traitement sur ces dernières.
-Cette combinaison en couple permet de tirer avantage de la capacité de stockage d’Hadoop et la vitesse de traitement et d’analyse de Spark.    
-
+Spark and Hadoop form a pair often used by companies for processing and analyzing data stored in HDFS.
+Spark is best suited for near real-time processing (high processing speed) and advanced analytics.
+In contrast, Hadoop excels in storing data ranging from structured to unstructured and running batch processes for processing.
+This pairing takes advantage of the storage capacity of Hadoop and the processing and analysis speed of Spark.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=10cm]{sparkSchema}
-	\caption{Schéma des Composants de Spark}
+	\caption{Spark Ecosystem}
+	\label{fig:sparkEcosystem}
 \end{figure}
 
-Apache Spark est un regroupement de composants (Figure 2 - 13) qui fonctionne autour du noyau de Spark (Spark Core).
-Autour du noyau s’intègre des services, des APIs et des librairies de haut niveau.
+The Spark ecosystem is composed of several Services, APIs, and high-level libraries (see Figure \ref{fig:sparkEcosystem}), which work around the Spark Core.
 
-Spark met à la disposition des programmeurs un ensemble de librairies et de différents langages pour réaliser une application capable d’être exécuté sur un cluster Spark et de produire des codes dans un langage qui convient le mieux au programmeur.
-Parmi les librairies disponibles actuellement pour l’accomplissement d’application se trouvent MLib pour le Machine Learning, GraphX pour les traitements de données graphes en parallèles et SparkR pour travailler avec le langage R dans l’environnement cluster de Spark.
-D’autres langages s’ajoutent à la liste comme Java, Scala, Python et SQL.
+Spark provides programmers with a set of libraries to build an application that can be run on a Spark cluster and produce code in a language that best suits the programmer.
+Among the available libraries are MLib for Machine Learning, GraphX for parallel graph data processing, and SparkR for working with the R language in the Spark cluster environment.
+Other languages added to the list include Java, Scala, Python, and SQL.
 
-Spark offre deux (2) APIs, DataFrames et Resilient Distributed Datasets (RDDs). Les DataFrames (API non-typé) et les DataSets (API typé) fournissent une vision de fonctionnement pour l’utilisateur, son mode de fonctionnement réel dans Spark.
-Pour un utilisateur, ils sont des tables représentées par des lignes et des colonnes distribuées en mémoire sur le cluster.
-Pour Spark, ceux sont des tables immutables à évolution lente.
-Spark gère le traitement de données structurées avec SQL ou à travers les Dataframes et les DataSets.
-Les RDDs en revache, est l’abstraction de plus bas niveau de Spark représentant une collection d’éléments immutable et partitionnée utilisable en parallèle sur cluster.
-Pour un utilisateur, chaque ligne représente un objet Java.
-Ce qui lui donne un contrôle complet et une facilité dans la manipulation des données.
-Un RDD étant l’abstraction de base, lors de la compilation du code ou se trouve des DataFrames ou des DataSets seront transformés chacun en RDD.
+Spark offers two APIs, DataFrames and Resilient Distributed Datasets (RDDs).
+DataFrames (untyped API) and DataSets (typed API) provide a view of how the user will operate in Spark.
+To a user, they are tables represented by rows and columns distributed in memory across the cluster.
+For Spark, they are immutable, slowly evolving tables.
+Spark handles the processing of structured data with SQL or through Dataframes and DataSets.
+RDDs, in turn, are the lowest level abstraction of Spark, representing an immutable, partitioned collection of elements used for parallel processing on a cluster.
+As RDDs are the core abstraction, when compiling the code, DataFrames or DataSets are transformed into RDDs.
 
-Spark SQL est un module pour travailler avec les données structurées.
-Spark SQL est utilisé pour l’exécution des requête SQL ou à travers le DataFrame API utilisable dans les langage Java, Python, Scala et R.
-SQL et DataFrames combinées fournit un moyen commun pour accéder à une variété de sources de données tel que Hive, Avro, Parquet, ORC, JSON, CSV, JDBC et ODBC.
+Spark SQL is a module for working with structured data.
+Spark SQL is used to execute SQL queries or through the DataFrame API, which works with Java, Python, Scala, and R.
+The combination of SQL and DataFrames provides a common way to access various data sources such as Hive, Avro, Parquet, ORC, JSON, CSV, JDBC, and ODBC.
 
-Spark Streaming est un module dans spark pour la réalisation d’application de traitement de données en temps réel.
-Streaming apporte la capacité de concevoir des applications interactives interactive d’analyse, de surveillance et de détection.
-Il donne aussi la possibilité de réutiliser le même code de traitement batch, d’effectuer des jointures de données de diffusion (en acquisition temps réel) et des données Historiques ou d’exécuter des requêtes sur des données en mode diffusion (temps réel).
+Spark Streaming is a module in Spark for building real-time data processing applications.
+Streaming provides the ability to design interactive analysis, monitoring, and detection applications.
+It also allows the reuse of the same batch processing code to perform joins of broadcast data (in real-time acquisition) and historical data or to run queries on broadcast (real-time) data.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=10cm]{sparkConfig}
-	\caption{Schéma des modes de configuration de Spark}
+	\caption{Spark deployment modes}
 \end{figure}
 
-Dans un cluster, Spark nécessite un gestionnaire de ressources (Resource Manager ou Cluster manager) pour l’optimisation, la surveillance (ou le contrôle d’activité) et l‘attribution d’exécution de taches sur le cluster.
-Il supporte trois (3) types de gestionnaire de ressources dans une configuration en cluster (Figure 2 - 14).
-Le mode “Standalone ou Native Cluster Manager” où le gestionnaire de ressource est celui de Spark.
-Le mode « Yarn » utilisant le gestionnaire de ressource d’Hadoop, Yarn.
-Le mode « Mesos » utilisant le gestionnaire de ressource indépendante Apache Mesos.
-A noter que Spark est capable en un mode « Local » qui est un mode non-distribué.
-Dans ce mode, tous ses processus sont dans un seul JVM sur une seule machine, idéal pour les tests et de débogage.
+In a cluster, Spark requires a resource manager (or cluster manager) to optimize, monitor, control, and assign execution of tasks on the cluster.
+It supports four types of resource managers in a cluster configuration (Figure 2 - 14).
+In Standalone or Native Cluster Manager mode, Spark uses its integrated resource manager.
+In "YARN" mode, Spark uses Hadoops resource manager.
+In "Mesos" mode, Spark runs under an independent Apache Mesos resource manager.
+In "Kubernetes" mode, Spark uses the Kubernetes scheduler as its resources manager.
+Note that Spark also has a "Local" mode in which it executes in a non-distributed manner.
+In this mode, all its processes are in a single JVM on a single machine, ideal for testing and debugging.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\linewidth]{sparkArch}
-	\caption[Schéma de l'architecture de fonctionnement de Spark en cluster]{Schéma de l'architecture de fonctionnement de Spark en cluster \footnotemark}
+	\caption[Spark cluster Architecture]{Spark cluster Architecture \footnotemark}
+	\label{fig:sparkClusterArchitecture}
 \end{figure}
 
 \footnotetext{Source : \url{https://spark.apache.org/docs/latest/cluster-overview.html}}
 
-Dans une architecture distribuée d’Apache Spark (Figure 2 - 15), une application Spark s’exécute en un ensemble de processus indépendante sur le cluster.
-Un application Spark se compose d’une application principale nommé « Driver Program » et dans Driver program, le SparkContext qui est le coordinateur de ses propres processus s’exécutant sur le cluster.
-Lors d’un lancement d’une application Spark, SparkContext contacte le gestionnaire de ressources du cluster, qui lui alloue des Executors dans des nœuds esclaves (Works Node).
-Un Executor est un processus ayant pour fonctionne le traitement et le stockage de données pour l’application s’exécutant, à savoir le SparkContext garant de ce processus.
-Mainteant que le SparkContext est en communication direct avec ses Executors, il peut à présent envoyer le code de l’application aux Executors et qui par la suite envoie les taches aux Executors pour être traitées.
-Le code de l’application envoyé est soit un JAR ou un fichier Python qui est transmis à SparkContext.
+In a distributed Apache Spark architecture (see Figure ~\ref{fig:sparkClusterArchitecture}), a Spark application runs as a set of processes on the cluster.
+There are two principal types of Spark processes - one primary process called Driver and multiple spark executor processes.
+The Driver process is similar to Hadoops Application Master.
+When we submit a Spark application to the cluster manager, it will start a  container to run the Driver process.
+The Driver assesses the required resources and plans the execution of the application on the cluster.
+Then, it requests the resource manager to launch the required amount of spark executors.
+Next, it submits application-related tasks to the executors and monitors their execution until they finish.
 
 
-\subsection{Installation de Apache Spark 2.2.0 un cluster}
+\subsection{Installing Apache Spark 3.1.2}
 
-Cette section montre comment installer Spark en cohabitation avec Hadoop dans un cluster existant (cluster configuré précédemment).
-Comme on peut voir sur le schéma suivant (Figure 2 - 16), Spark Master sera mis sur le Master Node, le même que celui d’Hadoop Master et deux (2) Spark Slave sur les autres nœuds du cluster (Slave1 et Slave2).
-Il s'agit d'utiliser Spark avec Yarn, le même gestionnaire de ressources utilisé par Hadoop.
-Cela signifie que Spark et Hadoop partageront les mêmes ressources (RAM, CPU, disque). Le Yarn, en tant que gestionnaire de ressources de tous les deux, a la responsabilité de bien équilibrer l'allocation de ressources sur les nœuds esclaves (Slave Node).
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\linewidth]{sparkCluster}
-	\caption{Schéma de configuration de Spark sur le cluster d'Hadoop}
-\end{figure}
+This section shows how to install Spark on an existing (previously configured) Hadoop cluster.
+We will use YARN from our previous Hadoop installation as the Spark resource manager, and all three Hadoop worker nodes will also act as Spark workers.
+This setup implies that Spark and Hadoop will share the same resources (RAM, CPU, disk).
+As the resource manager for both, YARN is responsible for balancing the resource allocation on the Worker Nodes.
 
-\subsubsection{Prérequis}
+\subsubsection{Prerequisites}
 
-Pour cette configuration de Spark en cluster, l’installation du cluster Hadoop doit être déjà mise en place, avec toutes les configurations nécessaires tel que Java 8, création de l’utilisateur hdb, installation de SSH serveur, génération de clef avec ssh-keygen pour l’utilisateur hdb sur toutes les machines du cluster, configuration de fichier /etc/hosts (voir section 2.5).
-Spark est un Framework écrit en scala, il lui faut Scala pour fonctionner.
-Ce qui fait que Spark a aussi besoin de Java pour son fonctionnement Car Scala est basé sur ce dernier.
+As we install Spark on YARN, a Hadoop cluster installation must already be in place, with all the necessary setup presented in section 2.5.
+In our examples, we will use Sparks python API.
+Therefore we will also have to install Python on our machines.
 
-\subsubsection{Installation de Scala}
+\subsubsection{Installing Python 3.9}
 
-La version de Spark 2.2.0 est compiler avec la version 2.11.0 de Scala,
-Il est recommandé d’utiliser la même version de compilation.
-Cette version de Scala est trouvable sur le site officiel (https://www.scala-lang.org/download/2.11.11.html).
-Cette étape doit être réalisée sur toutes les machine du cluster.
+This step is optional as Ubuntu 20.04.1 ships with Python 3.8 pre-installed.
+However, in our case, we would prefer to use Python 3.9.
+To install Python 3.9 on an Ubuntu machine, it is sufficient to run the following command:
 
-Aller dans le répertoire /usr/local/ comme pour l’installation des autres précédemment
+\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
+sudo apt install python3.9
+\end{lstlisting}
+
+We will run this command on all nodes of the cluster.
+
+\subsubsection{Spark installation}
+
+Spark's binaries are available at its official website (https://spark.apache.org/).
+We will install Spark alongside Hadoop in the "/usr/local" directory on all cluster nodes.
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 cd /usr/local
 \end{lstlisting}
 
-Téléchargement de Scala
+Download Spark binaries:
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
-sudo wget https://downloads.lightbend.com/scala/2.11.11/scala-2.11.11.tgz
+sudo wget https://www.apache.org/dyn/closer.lua/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
 \end{lstlisting}
 
-Désarchiver le fichier nouvellement téléchargé (ici scala-2.11.11.tgz)
+Untar Spark: (Note that we also give our Hadoop user ownership of the installation directory, and we also create a handy alias to ease access to the Spark installation directory).
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-sudo tar -zxf  scala-2.11.11.tgz
+sudo tar zxvf spark-3.1.2-bin-hadoop3.2.tgz
+sudo chown -R hdoop:hdoop spark-3.1.2-bin-hadoop3.2
+sudo ln -s spark-3.1.2-bin-hadoop3.2 spark
 \end{lstlisting}
 
-Vérifier si Scala fonctionne
-Se connecter en tant que hdb
+\paragraph{Setup environment variables}\mbox{}\\
+
+Next, it is required to set some environment variables that Spark uses.
+For that, we will switch to the Hadoop user and add them to the profile file.
+We perform this step on all machines in the cluster.
+
+Switch to the Hadoop user:
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-sudo su hdb
+su - hdoop
 \end{lstlisting}
 
-Lancer Scala en tapant la commande suivante :
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-scala
-\end{lstlisting}
-
-Tapez cette instruction pour mettre fin à l'exécution de scala
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-:quit
-\end{lstlisting}
-
-\subsubsection{Installation de Spark}
-
-La version binaire d’Apache Spark peut être récupéré sur le site officiel (https://spark.apache.org/).
-
-Allez dans un répertoire partager pour que Spark puisse être exécuté par un autre utilisateur.
-Nous faisons le choix du répertoire /usr/local/ comme pour l’installation des autres précédemment.
-Cette étape doit être réalisée que sur le nœud « Master ».
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-cd /usr/local
-\end{lstlisting}
-
-Téléchargement de Spark
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]
-sudo wget http://mirrors.standaloneinstaller.com/apache/spark/spark-2.2.0/spark-2.2.0-bin-hadoop2.7.tgz
-\end{lstlisting}
-
-Désarchiver le fichier nouvellement téléchargé (ici spark-2.2.0-bin-hadoop2.7.tgz) et renommer le répertoire obtenu en spark-2.2.0.
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-sudo tar xzf spark-2.2.0-bin-hadoop2.7.tgz 
-sudo mv spark-2.2.0-bin-hadoop2.7  spark-2.2.0
-\end{lstlisting}
-
-Donner l’utilisateur hdb la propriété sur le répertoire
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-sudo chown hdb:hadoop spark-2.2.0
-\end{lstlisting}
-
-Aller dans le répertoire /conf/ de spark, copier le fichier modèle pour créer le fichier d’environnement Spark (spark-env.sh) et Ajouter le fichier les variables qui suit.
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-cd /usr/local/spark-2.2.0/conf/
-
-sudo cp spark-env.sh.template spark-env.sh
-
-sudo nano spark-env.sh
-\end{lstlisting}
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-
-export SPARK_WORKER_CORES=2
-\end{lstlisting}
-
-Toujours dans le répertoire /conf/, éditer le fichier « slaves » les alias correspondant aux adresse IP de tous les nœuds esclaves du cluster afin d’indiquer à Spark, les machines agissant comme esclave.
-Ici, les esclaves sont « hdslave1 » et « hdslave2 »
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-sudo nano /usr/local/spark-2.2.0/conf/slaves
-\end{lstlisting}
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-hdslave1
-hdslave2
-\end{lstlisting}
-
-\paragraph{Mise en place des variables d’environnement de Spark}\mbox{}\\
-
-Pour le fonctionnement, une mise en place de variables d’environnement dans le profil de l’utilisateur responsable de l’exécution de Spark doit être effectuées.
-Cette étape devra être réalisée sur toutes les machine du cluster.
-
-Se connecter en tant que hdb
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-sudo su hdb
-\end{lstlisting}
-
-Ajouter les variables d’environnement de Spark dans le fichier profile de l’utilisateur hdb
+Edit the "/home/hdoop/.profile" and add these Spark environment variables at the end:
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
 nano /home/hdb/.bashrc
 \end{lstlisting}
-
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-# -- Spark ENVIRONMENT VARIABLE START -- #
-export SPARK_HOME=/usr/local/spark-2.2.0
+# -- Spark ENVIRONMENT VARIABLES START -- #
+export SPARK_HOME=/usr/local/spark
 export PATH=$PATH:$SPARK_HOME/bin
-
-export SCALA_HOME=/usr/local/scala-2.11.11
-export PATH=$PATH:$SCALA_HOME/bin
-# -- Spark ENVIRONMENT VARIABLE END -- #
+# -- Spark ENVIRONMENT VARIABLES END -- #
 \end{lstlisting}
 
-Rendre la modification du fichier profile active immédiatement
+To make the change in profile file effective immediately, we could use the next command:
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-source /home/hdb/.bashrc
+source /home/hdoop/.profile
 \end{lstlisting}
 
-Tester pour voir si Spark-Shell, la line de commande de spark fonctionne normalement avec la line suivante :
+To check if the setup was successful, we could try to launch the interactive python spark-shell:
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-spark-shell
+pyspark
 \end{lstlisting}
 
-Tapez cette instruction pour mettre fin à l'exécution de spark-shell
+We should obtain a command prompt waiting for our input. To exit the python spark-shell, we could type the following line and press Enter.
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-:quit
+quit()
 \end{lstlisting}
 
-\paragraph{Creation des répertoires d’utilisation de spark dans HDFS}\mbox{}\\
+\subsubsection{Simple Python Spark example with Yarn}
 
-Créer dans HDFS le répertoire /user/spark/ et assigner les droit lecture et écriture pour l’exécution des tâches de spark. 
+In this section, we will show a Spark word count MapReduce example in Python.
+In this example, our Spark application will be a client of Hadoop's YARN resource manager.
+We will use the previously created files in the /user/hdoop/example directory on HDFS (\textbf{test\_file\_1.txt} and \textbf{test\_file\_2.txt}).
 
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-hdfs dfs -mkdir       /user/spark/
-hdfs dfs -chmod g+w   /user/spark/
-\end{lstlisting}
-
-\subsubsection{Configuration installation et configuration de Spark sur les nœuds esclaves}\mbox{}\\
-
-Pour la configuration les nœuds esclaves, elle se fera en dans partie.
-Une partie, sur la machine Master qui consiste à récupérer la configuration initiale du nœud Master et de le copier sur les nœuds esclaves à savoir « hdslave1 » et « hdslave2 ».
-La seconde sera effectuée sur les nœuds esclave. Cette seconde partie consiste à déployer le répertoire copié dans son environnement naturel et donner droit à l’utilisateur hdb sur ce dernier. 
-
-\paragraph{Etape 1 à effectuer depuis le nœud Master}\mbox{}\\
-
-Archiver le répertoire Spark avec tar :  
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-sudo tar czf spark-2.2.0.tar.gz spark-2.2.0
-\end{lstlisting}
-
-Copier par SSH le fichier archive de Spark sur tous les nœuds esclaves avec l’utilisateur hdb à partir des commandes qui suit :
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-sudo scp spark-2.2.0.tar.gz hdb@hdslave1:~
-sudo scp spark-2.2.0.tar.gz hdb@hdslave2:~
-\end{lstlisting}
-
-\paragraph{Etape 2 à effectuer depuis les nœuds esclaves}\mbox{}\\
-
-Etant sur chaque machine esclave, aller dans le répertoire /usr/local/ , désarchiver le fichier  spark-2.2.0.tar.gz qui se trouve dans /home/hdb/ et copier le répertoire (spark-2.2.0) nouvellement crée dans /usr/local/ en utilisant les commande suivantes :
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-cd /usr/local/
-sudo tar xzf /home/hdb/spark-2.2.0.tar.gz 
-sudo cp /home/hdb/spark-2.2.0.tar.gz spark-2.2.0
-\end{lstlisting}
-
-Donner l’utilisateur hdb la propriété sur le répertoire de Spark
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-sudo chown hdb:hadoop spark-2.2.0
-\end{lstlisting}
-
-\subsubsection{Démarrage des services des démons de Spark sur le cluster}
-
-Arriver dans cette étape, on peut maintenant démarrer les démons de Spark sur les machines du cluster. De même que Hadoop, Spark peut mettre en route tous les démons Master et Workers à partir du nœud Master.
-
-Lancer cette commande sur le noeud maître en tant que l’utilisateur hdb
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-$SPARK_HOME/sbin/start-all.sh 
-\end{lstlisting}
-
-Verifier sur le nœud maitre avec cette commande, si tous les démons sont en exécution. Le démon du maitre de Spark est « Master »
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-jps
-\end{lstlisting}
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-20226 ResourceManager
-19811 NameNode
-11509 Jps
-20038 SecondaryNameNode
-11435 Master
-\end{lstlisting}
-
-Verifier sur les nœuds esclaves avec cette commande, si tous les démons sont en exécution. Le démon du nœud esclaves de Spark est « Worker »
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-jps
-\end{lstlisting}
-
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-8561 Jps
-8249 NodeManager
-7753 DataNode
-7964 Worker
-\end{lstlisting}
-
-Pour l’arrêter les démons de Spark, lancer le fichier \$SPARK\_HOME/sbin/stop-all.sh en étant l’utilisateur propriétaire de Spark.
-Dans notre cas, l’utilisateur est hdb. 
-
-\subsubsection{Exemple simple d’exécution d’application sur spark-shell avec Yarn}
-
-Dans cette section, on verra à partir d’un exemple de MapReduce de compter de mot en Scala, comment exécuter et traiter des données à partir du Shell de Spark.
-Dans cet exemple, le Shell de Spark sera connecté en tant de client de du gestionnaire de ressources de Hadoop Yarn.
-Dans l’exemple, l’usage des fichiers test01 et test02 dans le répertoire /user/hdb/input\_ex dans HDFS crées précédemment.
-
-Passer cette commande pour lancer le Spark-Shell en tant que client de yarn
+Pass this command to launch the Python Spark-Shell as a client of YARN on a cluster node.
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
-$SPARK_HOME/bin/spark-shell --master yarn --deploy-mode client
+pyspark --master yarn --deploy-mode client
 \end{lstlisting}
 
-Après avoir exécuter spark-shell en tant que client yarn, exécuter le code compteur de mot dans l’invite Scala de Spark.
-Le programme MapReduce en parametre en entrée (input) le répertoire (/user/hdb/input\_ex) dans HDFS où se trouve les fichiers test01 et test02 et en sortie (output) le répertoire (/user/hdb/output\_ex\_spark) pour le dépôt des résultats obtenus.
-A noter que les liens de connexion vers HDFS est hdfs://hdmaster:9000, avec hdmaster, l’alias du nœud maitre et le port 9000 pour de connexion au service d’HDFS.
+After running the pyspark-shell as a yarn client, type the word counter code shown below in the Python Spark prompt.
 
-\begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
-val textFile = sc.textFile("hdfs://hdmaster:9000/user/hdb/input_ex")
-val text = textFile.flatMap(line => line.split(" "))
-val map = text.map(word => (word, 1))
-val reduce = map.reduceByKey(_ + _)
-reduce.saveAsTextFile("hdfs://hdmaster:9000/user/hdb/output_ex_spark")
+\begin{lstlisting}[language=python, frame=single, basicstyle=\footnotesize, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}]]
+lines = sc.textFile("hdfs:///user/hdoop/example")
+words = lines.flatMap(lambda x: x.split())
+tuples = words.map(lambda x: (x, 1))
+count_by_word = tuples.reduceByKey(lambda a, b: a + b)
+count_by_word.saveAsTextFile("hdfs:///user/hdoop/output_ex_spark")
 \end{lstlisting}
 
-Les résultats sont dans le fichiers part-00000 à part-xxxx.
-Selon le volume d’information à stocker, il peut les séparer en plusieurs parties des numérotations continues avec le préfixe « part- ».
+The first line of the Spark program indicates the directory from where to load the input data.
+Each line present in the files will become an item of the "lines" RDD.
+Then, with the flatMap method, we split each item by space and create a new  RDD where each item is a word.
+Next, we use the map method to transform each word into a tuple.
+The tuple holds the original word as the key and the integer one as the value.
+Then we group all resulting tuples by their key and sum up the values for each group with the reduceByKey function.
+Finally, we save our result on HDFS using the saveAsTextFile function.
 
-Afficher les résultats obtenus :
+Spark will store the results in the output directory "/user/hdoop/output\_ex\_spark" in files named from part-00000 to part-XXXXX.
+The number of part-XXXXX files depends on the number of partitions the final RDD had.
+
+To display our results we could run the following command in the shell :
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
-hadoop fs -cat  /user/hdb/output_ex_spark/part-*
+hadoop fs -cat  /user/hdoop/output_ex_spark/*
 \end{lstlisting}
 
 \begin{lstlisting}[language=bash, frame=single, basicstyle=\footnotesize]
@@ -1920,7 +1767,7 @@ hadoop fs -cat  /user/hdb/output_ex_spark/part-*
 \end{lstlisting}
 
 
-\section{Références du Chapitre 2}
+\section{Chapter 2 References}
 
 How Hadoop splits input data:
 https://stackoverflow.com/questions/14291170/how-does-hadoop-process-records-split-across-block-boundaries
